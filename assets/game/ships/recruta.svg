@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="320" viewBox="0 0 512 320">
-  <defs><linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#42d9ff"/><stop offset="1" stop-color="#07518a"/></linearGradient><filter id="g"><feGaussianBlur stdDeviation="8"/></filter></defs>
-  <g opacity=".28" fill="#42d9ff" filter="url(#g)"><ellipse cx="256" cy="278" rx="46" ry="22"/></g>
-  <g fill="url(#h)" stroke="#42d9ff" stroke-width="5" stroke-linejoin="round"><path d="M214 128 L78 220 L180 216 L230 180 Z"/><path d="M298 128 L434 220 L332 216 L282 180 Z"/><path d="M256 24 L286 104 L366 190 L316 198 L290 254 L256 276 L222 254 L196 198 L146 190 L226 104 Z"/></g>
-  <path d="M256 55 L276 126 L256 176 L236 126 Z" fill="#dff9ff" stroke="#42d9ff" stroke-width="4"/>
-  <rect x="246" y="88" width="20" height="58" rx="8" fill="#f7ffff"/>
-  <path d="M226 194 L244 270 L256 238 L268 270 L286 194" fill="none" stroke="#42d9ff" stroke-width="9" stroke-linecap="round"/>
-  <circle cx="216" cy="155" r="7" fill="#42d9ff"/><circle cx="296" cy="155" r="7" fill="#42d9ff"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="320" viewBox="0 0 512 320"><defs><linearGradient id="h" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#42d9ff"/><stop offset="1" stop-color="#07518a"/></linearGradient><filter id="g"><feGaussianBlur stdDeviation="8"/></filter></defs><ellipse cx="256" cy="278" rx="55" ry="22" fill="#42d9ff" opacity=".22" filter="url(#g)"/><g fill="url(#h)" stroke="#42d9ff" stroke-width="5" stroke-linejoin="round"><path d="M214 128 L78 220 L180 216 L230 180 Z"/><path d="M298 128 L78 220 L180 216 L230 180 Z"/> <path d="M256 24 L286 104 L366 190 L316 198 L290 254 L256 276 L222 254 L196 198 L146 190 L226 104 Z"/></g><path d="M256 55 L276 126 L256 176 L236 126 Z" fill="#dff9ff" stroke="#42d9ff" stroke-width="4"/><rect x="246" y="88" width="20" height="58" rx="8" fill="#f7ffff"/><path d="M226 194 L244 270 L256 238 L268 270 L286 194" fill="none" stroke="#42d9ff" stroke-width="9" stroke-linecap="round"/><circle cx="216" cy="155" r="7" fill="#42d9ff"/><circle cx="296" cy="155" r="7" fill="#42d9ff"/></svg>
