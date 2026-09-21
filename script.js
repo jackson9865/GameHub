@@ -185,6 +185,16 @@ const galaxyBackgrounds=Array.from({length:5},(_,idx)=>{
   img.src="assets/game/backgrounds/galaxy-"+(idx+1)+".svg";
   return img;
 });
+const enemyImages=Array.from({length:6},(_,idx)=>{
+  const img=new Image();
+  img.src="assets/game/enemies/enemy-"+(idx+1)+".svg";
+  return img;
+});
+const bossImages=Array.from({length:5},(_,idx)=>{
+  const img=new Image();
+  img.src="assets/game/bosses/boss-"+(idx+1)+".svg";
+  return img;
+});
 function currentGalaxyIndex(phase){
   return Math.max(0,(phase-1)%galaxyBackgrounds.length);
 }
@@ -279,7 +289,7 @@ function renderShipOptions(){
   wrap.innerHTML=shipCatalog.map(ship=>{
     const owned=data.owned.includes(ship.id),available=data.maxPhase>=ship.unlockPhase;
     const p=shipProgress(ship.id),selected=ship.id===selectedShipId;
-    const action=owned?"Selecionar":available?"Comprar":"BLOQUEADA";
+    const action=owned?"ABRIR OFICINA":available?"COMPRAR":"BLOQUEADA";
     const price=owned?"NAVE DESBLOQUEADA":available?formatCredits(ship.price)+" CRÉDITOS":"LIBERA NA FASE "+ship.unlockPhase;
     const image="assets/game/ships/"+ship.style+".svg";
     return '<article class="ship-card '+(selected?"selected ":"")+(owned?"owned ":"")+(available?"":"phase-locked")+'" data-ship-card="'+ship.id+'">'+
@@ -288,7 +298,7 @@ function renderShipOptions(){
       '<div class="ship-combat-stats"><span>LASER</span><b>'+ship.damage.toFixed(2)+'</b><span>MÍSSEIS</span><b>'+Math.round(450+ship.damage*100)+'</b></div>'+
       '<span class="ship-price">'+price+'</span><button type="button" data-ship-action="'+ship.id+'" '+(available?"":"disabled")+'>'+action+'</button></article>';
   }).join("");
-  $("[data-ship-card]").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
+  $(".ship-card").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
   $("[data-ship-action]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();const id=btn.dataset.shipAction;const d=getShipSave();d.owned.includes(id)?selecionarNave(id):comprarNave(id)}));
   atualizarSelecaoNave();
   renderUpgradePanel();
@@ -314,8 +324,40 @@ function selecionarNave(id){
   selectedShipId=id;
   localStorage.setItem("gamehubNaveSelecionada",id);
   renderShipOptions();
+  abrirOficinaNave(id);
 }
-function atualizarSelecaoNave(){
+function abrirOficinaNave(id){
+  selectedShipId=id;
+  localStorage.setItem("gamehubNaveSelecionada",id);
+  const ship=shipById(id);
+  const p=shipProgress(id);
+  const data=getShipSave();
+  $("#gameStartOverlay").classList.add("hidden");
+  $("#shipWorkshopOverlay").classList.remove("hidden");
+  $("#workshopShipName").textContent=ship.name;
+  $("#workshopShipDesc").textContent=ship.desc;
+  $("#workshopShipImage").src="assets/game/ships/"+ship.style+".svg";
+  $("#workshopCredits").textContent=formatCredits(data.credits);
+  const values=[
+    ["LASER",ship.damage+(p.level-1)*.09+(p.modules.weapon||0)*.12,Math.min(100,(ship.damage/3+(p.modules.weapon||0)*.12)*100)],
+    ["ESCUDO",ship.shield+(p.level-1)*5+(p.modules.shield||0)*18,Math.min(100,(ship.shield/210+(p.modules.shield||0)*.08)*100)],
+    ["VIDA",ship.life+(p.level-1)*7+(p.modules.armor||0)*12,Math.min(100,(ship.life/210+(p.modules.armor||0)*.06)*100)],
+    ["VELOCIDADE",(ship.speed+(p.level-1)*.06+(p.modules.engine||0)*.35).toFixed(1),Math.min(100,(ship.speed/7+(p.modules.engine||0)*.05)*100)],
+    ["CADÊNCIA",Math.max(3,ship.fire-Math.floor((p.level-1)/4)-(p.modules.cooling||0)*.6).toFixed(1)+" s",Math.max(20,100-ship.fire*8+(p.modules.cooling||0)*15)],
+    ["MÍSSIL",Math.round(450+ship.damage*100+(p.modules.weapon||0)*55),Math.min(100,45+ship.damage*18+(p.modules.weapon||0)*8)]
+  ];
+  $("#workshopShipStats").innerHTML=values.map(v=>'<div class="workshop-stat"><small>'+v[0]+'</small><strong>'+v[1]+'</strong><div class="bar"><i style="width:'+v[2]+'%"></i></div></div>').join("");
+  $("#workshopUpgrades").innerHTML=moduleCatalog.map(m=>{
+    const lv=p.modules[m.id]||0,cost=m.base*(lv+1),locked=lv>=3,need=3+lv,canLevel=p.level>=Math.min(need,ship.maxLevel),canBuy=data.credits>=cost&&canLevel&&!locked;
+    return '<div class="workshop-upgrade"><b>'+m.icon+' '+m.name+' · NV. '+lv+'/3</b><small>'+m.desc+(canLevel?"":" · requer nível "+need)+'</small><button type="button" data-workshop-upgrade="'+m.id+'" '+(canBuy?"":"disabled")+'>'+ (locked?"MÁXIMO":canBuy?"MELHORAR · "+formatCredits(cost)+" CR":"BLOQUEADO") +'</button></div>';
+  }).join("");
+  $("[data-workshop-upgrade]").forEach(btn=>btn.addEventListener("click",()=>{comprarUpgrade(ship.id,btn.dataset.workshopUpgrade);setTimeout(()=>abrirOficinaNave(ship.id),0)}));
+}
+function fecharOficina(){
+  $("#shipWorkshopOverlay").classList.add("hidden");
+  $("#gameStartOverlay").classList.remove("hidden");
+  renderShipOptions();
+}\nfunction atualizarSelecaoNave(){
   const ship=shipById(selectedShipId),p=shipProgress(ship.id),info=$("#selectedShipInfo");
   if(info)info.textContent=ship.name+" selecionada · Nível "+p.level+"/"+ship.maxLevel+" · XP "+p.xp+" · "+ship.desc;
   $$(".ship-card").forEach(c=>c.classList.toggle("selected",c.dataset.shipCard===selectedShipId));
@@ -401,7 +443,7 @@ function iniciarPartida(){
     spawnTimer:16,boss:null,bossActive:false,phaseTransition:0,startTime:performance.now(),elapsed:0
   };
   gameRunning=true;gamePaused=false;lastFrame=performance.now();
-  $("#gameStartOverlay").classList.add("hidden");$("#gamePauseOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");$("#gameBossOverlay").classList.add("hidden");$("#gameUnlockOverlay").classList.add("hidden");
+  $("#gameStartOverlay").classList.add("hidden");$("#shipWorkshopOverlay").classList.add("hidden");$("#gamePauseOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");$("#gameBossOverlay").classList.add("hidden");$("#gameUnlockOverlay").classList.add("hidden");
   audioStart();atualizarHUD();cancelarAnimacao();renderGame(lastFrame);gameAnimation=requestAnimationFrame(gameLoop);
 }
 function cancelarAnimacao(){if(gameAnimation)cancelAnimationFrame(gameAnimation);gameAnimation=null}
@@ -427,9 +469,9 @@ function iniciarNovaFase(){
 function iniciarChefe(){
   gameState.bossActive=true;
   const hp=2400+gameState.phase*260;
-  gameState.boss={x:480,y:85,hp,maxHp:hp,w:190,h:120,speed:1.15+gameState.phase*.01,dir:1,cooldown:42,shield:700+gameState.phase*65,maxShield:700+gameState.phase*65};
+  gameState.boss={x:480,y:85,hp,maxHp:hp,w:190,h:120,speed:1.15+gameState.phase*.01,dir:1,cooldown:42,shield:700+gameState.phase*65,maxShield:700+gameState.phase*65,imageIndex:(gameState.phase-1)%bossImages.length};
   gameState.enemies=[];
-  $("#bossTitle").textContent="CHEFÃO — TITAN ENEMY";
+  $("#bossTitle").textContent="CHEFÃO — CLASSE "+(gameState.boss.imageIndex+1);
   $("#gameBossOverlay").classList.remove("hidden");
   setTimeout(()=>$("#gameBossOverlay").classList.add("hidden"),1800);
   sfxBossExplosion();
@@ -456,7 +498,7 @@ function spawnEnemy(){
   const level=gameState.phase,roll=Math.random();
   const type=roll<.48?"scout":roll<.82?"fighter":"hunter";
   const hp=type==="fighter"?2+Math.floor(level/10):type==="hunter"?3+Math.floor(level/8):1+Math.floor(level/20);
-  gameState.enemies.push({x:35+Math.random()*890,y:-45,targetY:90+Math.random()*120,w:38,h:32,speed:1.0+Math.random()*1.1+level*.012,life:hp,maxLife:hp,type,shoot:60+Math.random()*100,phase:Math.random()*6.28,formation:false});
+  gameState.enemies.push({x:35+Math.random()*890,y:-45,targetY:90+Math.random()*120,w:38,h:32,speed:1.0+Math.random()*1.1+level*.012,life:hp,maxLife:hp,type,shoot:60+Math.random()*100,phase:Math.random()*6.28,formation:false,imageIndex:Math.floor(Math.random()*enemyImages.length)});
 }
 function spawnFormation(){
   const count=8+Math.floor(Math.random()*5);
@@ -543,36 +585,24 @@ function drawBackground(ctx,now){
 }
 function drawPlayer(ctx,p,ship){
   if(p.inv>0&&Math.floor(p.inv/4)%2===0)return;
-  const style=ship.style||"scout";
-  ctx.save();ctx.translate(p.x,p.y);ctx.shadowBlur=24;ctx.shadowColor="#16baff";
-  const wing=style==="titan"||style==="guardian"?32:26;
-  ctx.fillStyle=style==="eclipse"?"#8d66ff":style==="viper"?"#00e5c8":"#0b83d5";
-  ctx.beginPath();ctx.moveTo(0,-34);ctx.lineTo(wing,20);ctx.lineTo(11,14);ctx.lineTo(0,30);ctx.lineTo(-11,14);ctx.lineTo(-wing,20);ctx.closePath();ctx.fill();
-  ctx.fillStyle="#65e8ff";ctx.beginPath();ctx.moveTo(0,-25);ctx.lineTo(10,10);ctx.lineTo(0,20);ctx.lineTo(-10,10);ctx.closePath();ctx.fill();
-  ctx.fillStyle="#eafcff";ctx.fillRect(-4,-5,8,13);
-  ctx.fillStyle="#18c7ff";
-  ctx.beginPath();ctx.moveTo(-10,20);ctx.lineTo(-4,43+Math.random()*7);ctx.lineTo(0,20);ctx.closePath();ctx.fill();
-  ctx.beginPath();ctx.moveTo(10,20);ctx.lineTo(4,43+Math.random()*7);ctx.lineTo(0,20);ctx.closePath();ctx.fill();
-  if(style==="falcon"||style==="nova"||style==="eclipse"){ctx.fillStyle="#d8f8ff";ctx.fillRect(-wing,-1,9,4);ctx.fillRect(wing-9,-1,9,4)}
+  const img=new Image();img.src="assets/game/ships/"+ship.style+".svg";
+  ctx.save();ctx.translate(p.x,p.y);
+  if(img.complete&&img.naturalWidth){ctx.shadowBlur=24;ctx.shadowColor="#16baff";ctx.drawImage(img,-58,-42,116,84)}
+  else{ctx.fillStyle="#18baff";ctx.beginPath();ctx.moveTo(0,-34);ctx.lineTo(28,24);ctx.lineTo(0,14);ctx.lineTo(-28,24);ctx.closePath();ctx.fill()}
   ctx.restore();
 }
 function drawEnemy(ctx,e){
-  const color=e.type==="hunter"?"#b34dff":e.type==="fighter"?"#ff8a3d":"#ff3e59";
-  ctx.save();ctx.translate(e.x,e.y);ctx.shadowBlur=18;ctx.shadowColor=color;
-  ctx.fillStyle=color;
-  ctx.beginPath();ctx.moveTo(0,-24);ctx.lineTo(16,-7);ctx.lineTo(32,6);ctx.lineTo(13,8);ctx.lineTo(0,25);ctx.lineTo(-13,8);ctx.lineTo(-32,6);ctx.lineTo(-16,-7);ctx.closePath();ctx.fill();
-  ctx.fillStyle="#ffe9ef";ctx.fillRect(-5,-6,10,11);
-  ctx.fillStyle="#6b1427";ctx.fillRect(-24,8,48,5);
-  ctx.fillStyle=color;ctx.fillRect(-38,3,-8,5);ctx.fillRect(8,3,38,5);
+  const img=enemyImages[e.imageIndex%enemyImages.length];
+  ctx.save();ctx.translate(e.x,e.y);
+  if(img&&img.complete&&img.naturalWidth){ctx.shadowBlur=16;ctx.shadowColor=e.type==="hunter"?"#b85cff":"#ff4058";ctx.drawImage(img,-38,-25,76,50)}
+  else{ctx.fillStyle="#ff4058";ctx.fillRect(-24,-12,48,24)}
   ctx.restore();
 }
 function drawBoss(ctx,b){
-  ctx.save();ctx.translate(b.x,b.y);ctx.shadowBlur=40;ctx.shadowColor="#ff2648";
-  ctx.fillStyle="#4b1026";ctx.beginPath();ctx.moveTo(0,-60);ctx.lineTo(118,-15);ctx.lineTo(92,12);ctx.lineTo(65,50);ctx.lineTo(0,34);ctx.lineTo(-65,50);ctx.lineTo(-92,12);ctx.lineTo(-118,-15);ctx.closePath();ctx.fill();
-  ctx.fillStyle="#ff314e";ctx.beginPath();ctx.moveTo(0,-42);ctx.lineTo(38,12);ctx.lineTo(0,27);ctx.lineTo(-38,12);ctx.closePath();ctx.fill();
-  ctx.fillStyle="#ffd9e0";ctx.fillRect(-10,-2,20,22);
-  ctx.fillStyle="#ff7285";ctx.fillRect(-70,3,38,9);ctx.fillRect(32,3,38,9);
-  ctx.strokeStyle="#ff5a70";ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(0,0,92,62,0,0,Math.PI*2);ctx.stroke();
+  const img=bossImages[b.imageIndex%bossImages.length];
+  ctx.save();ctx.translate(b.x,b.y);
+  if(img&&img.complete&&img.naturalWidth){ctx.shadowBlur=38;ctx.shadowColor="#ff3158";ctx.drawImage(img,-140,-84,280,168)}
+  else{ctx.fillStyle="#ff3158";ctx.fillRect(-100,-40,200,80)}
   ctx.restore();
 }
 function drawLaser(ctx,b){
@@ -760,7 +790,7 @@ if(localStorage.getItem("gamehubUsuario")&&!localStorage.getItem("gamehubSessao"
 
 atualizarInterface();
 
-$("#btnComecarPartida").addEventListener("click",iniciarPartida);
+$("#btnComecarPartida").addEventListener("click",iniciarPartida);\n$("#btnVoltarHangar").addEventListener("click",fecharOficina);\n$("#btnIniciarDaOficina").addEventListener("click",iniciarPartida);
 $("#btnReiniciarPartida").addEventListener("click",iniciarPartida);
 $("#btnPausaJogo").addEventListener("click",alternarPausa);
 $("#btnContinuarPartida").addEventListener("click",alternarPausa);
