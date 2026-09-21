@@ -121,23 +121,83 @@
     </section>
 
     <section id="gameScreen" class="game-screen hidden">
-      <div class="game-topbar">
-        <button id="btnVoltarJogo" class="btn-secondary" type="button">← Voltar</button>
-        <div><strong id="gameScreenTitle">Warzone Elite</strong><span id="gameStatus">Destrua os inimigos e sobreviva.</span></div>
-        <div class="game-hud"><span>❤️ <b id="gameLife">100</b></span><span>🏆 <b id="gameScore">0</b></span></div>
-      </div>
-      <div class="game-stage">
-        <canvas id="gameCanvas" width="960" height="540"></canvas>
-        <div id="gameStartOverlay" class="game-overlay">
-          <div class="game-panel"><div class="modal-icon">⚔️</div><h2>Warzone Elite</h2><p>WASD para mover, ESPAÇO para atirar.<br>No celular, use os controles na tela.</p><button id="btnComecarPartida" class="btn-primary" type="button">Iniciar partida</button></div>
+      <div class="warzone-shell">
+        <div class="warzone-brand">
+          <strong>GAME<span>HUB</span></strong>
+          <small>WARZONE ELITE</small>
         </div>
-        <div id="gameOverOverlay" class="game-overlay hidden">
-          <div class="game-panel"><div class="modal-icon">💥</div><h2>Fim de jogo</h2><p>Pontuação: <strong id="finalScore">0</strong></p><button id="btnReiniciarPartida" class="btn-primary" type="button">Jogar novamente</button></div>
+
+        <div class="boss-head">
+          <strong id="bossTitle">FASE 1 — PREPARE-SE</strong>
+          <div class="boss-bar"><i id="bossBarFill"></i></div>
         </div>
-      </div>
-      <div class="touch-controls">
-        <div class="dpad"><button data-key="ArrowUp">▲</button><div><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div></div>
-        <button id="touchFire" class="fire-button" type="button">🔥<span>ATIRAR</span></button>
+
+        <div class="warzone-actions">
+          <button id="btnPausaJogo" type="button" class="hud-button">Ⅱ</button>
+          <button id="btnVoltarJogo" type="button" class="hud-button">MENU</button>
+        </div>
+
+        <aside class="warzone-panel left">
+          <div class="hud-label">VIDA</div><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="hud-label shield-label">ESCUDO</div><div class="bars shield"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="hud-value"><small>PONTUAÇÃO</small><b id="gameScore">0</b></div>
+          <div class="hud-value compact"><small>FASE</small><b id="gamePhase">1 / 1000</b></div>
+          <div class="hud-value compact"><small>INIMIGOS</small><b id="gameEnemies">0</b></div>
+        </aside>
+
+        <aside class="warzone-panel right">
+          <div class="hud-value compact"><small>ARMA</small><b>✦ LASER NV.2</b></div>
+          <div class="hud-value compact"><small>BOMBAS</small><b>💣 <span id="gameBombs">3</span></b></div>
+          <div class="hud-value compact"><small>MULTIPLICADOR</small><b id="gameMultiplier">x1</b></div>
+          <div class="hud-value compact"><small>TEMPO</small><b id="gameTime">00:00</b></div>
+        </aside>
+
+        <div class="game-stage warzone-stage">
+          <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+          <div id="gameStartOverlay" class="game-overlay">
+            <div class="game-panel">
+              <div class="modal-icon">🚀</div>
+              <h2>Warzone Elite</h2>
+              <p>Prepare sua nave. São <strong>1000 fases</strong>, inimigos cada vez mais difíceis e um chefão ao final de cada fase.</p>
+              <button id="btnComecarPartida" class="btn-primary" type="button">Iniciar missão</button>
+            </div>
+          </div>
+
+          <div id="gamePauseOverlay" class="game-overlay hidden">
+            <div class="game-panel">
+              <div class="modal-icon">Ⅱ</div><h2>Jogo pausado</h2>
+              <p>A missão está congelada.</p>
+              <button id="btnContinuarPartida" class="btn-primary" type="button">Continuar</button>
+            </div>
+          </div>
+
+          <div id="gameOverOverlay" class="game-overlay hidden">
+            <div class="game-panel">
+              <div class="modal-icon">💥</div><h2 id="gameEndTitle">Nave destruída</h2>
+              <p>Pontuação: <strong id="finalScore">0</strong></p>
+              <button id="btnReiniciarPartida" class="btn-primary" type="button">Jogar novamente</button>
+            </div>
+          </div>
+
+          <div id="gameBossOverlay" class="game-overlay hidden">
+            <div class="game-panel boss-message">
+              <div class="modal-icon">☠️</div><h2>CHEFÃO DETECTADO</h2>
+              <p>Destrua a nave inimiga e avance para a próxima fase.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="warzone-footer-message">DESTRUA OS INIMIGOS E SOBREVIVA</div>
+
+        <div class="touch-controls">
+          <div class="dpad">
+            <button data-key="ArrowUp">▲</button>
+            <div><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div>
+          </div>
+          <button id="touchFire" class="fire-button" type="button">➤<span>ATIRAR</span></button>
+          <button id="touchBomb" class="bomb-button" type="button">💣<span>BOMBA</span></button>
+        </div>
       </div>
     </section>
 
