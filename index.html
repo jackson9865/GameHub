@@ -142,12 +142,12 @@
           <div class="hud-label shield-label">ESCUDO</div><div class="bars shield"><i></i><i></i><i></i><i></i><i></i><i></i></div>
           <div class="hud-value"><small>PONTUAÇÃO</small><b id="gameScore">0</b></div>
           <div class="hud-value compact"><small>FASE</small><b id="gamePhase">1 / 1000</b></div><div class="hud-value compact"><small>NAVE / NÍVEL</small><b id="gameShipLevel">—</b></div>
-          <div class="hud-value compact"><small>INIMIGOS</small><b id="gameEnemies">0</b></div>
+          <div class="hud-value compact"><small>INIMIGOS / ONDAS</small><b id="gameEnemies">0</b><small id="gameWaveProgress">ONDAS 0</small></div>
         </aside>
 
         <aside class="warzone-panel right">
           <div class="hud-value compact"><small>ARMA</small><b>✦ LASER NV.2</b></div>
-          <div class="hud-value compact"><small>BOMBAS</small><b>💣 <span id="gameBombs">3</span></b></div>
+          <div class="hud-value compact"><small>MÍSSEIS</small><b>🚀 <span id="gameBombs">3</span></b></div>
           <div class="hud-value compact"><small>MULTIPLICADOR</small><b id="gameMultiplier">x1</b></div>
           <div class="hud-value compact"><small>TEMPO</small><b id="gameTime">00:00</b></div>
         </aside>
@@ -190,6 +190,16 @@
               <p>Destrua a nave inimiga e avance para a próxima fase.</p>
             </div>
           </div>
+          <div id="gameUnlockOverlay" class="game-overlay hidden">
+            <div class="game-panel unlock-message">
+              <div class="unlock-badge">NOVA CONQUISTA</div>
+              <img id="unlockShipImage" class="unlock-ship-image" src="assets/game/ships/falcon.svg" alt="Nova nave desbloqueada">
+              <h2 id="unlockShipName">FALCON X</h2>
+              <p id="unlockShipText">Parabéns pela conquista!</p>
+              <strong id="unlockShipStats"></strong>
+              <button id="btnContinuarDesbloqueio" class="btn-primary full" type="button">IR PARA A PRÓXIMA FASE</button>
+            </div>
+          </div>
         </div>
 
         <div class="warzone-footer-message">DESTRUA OS INIMIGOS E SOBREVIVA</div>
@@ -200,7 +210,7 @@
             <div><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div>
           </div>
           <button id="touchFire" class="fire-button" type="button">➤<span>ATIRAR</span></button>
-          <button id="touchBomb" class="bomb-button" type="button">💣<span>BOMBA</span></button>
+          <button id="touchBomb" class="bomb-button" type="button">🚀<span>MÍSSIL</span></button>
         </div>
       </div>
     </section>
@@ -281,6 +291,6 @@
 
 <div id="toast" class="toast"></div>
 
-<script src="script.js?v=20260921-3"></script>
+<script src="script.js?v=20260921-5"></script>
 </body>
 </html>
