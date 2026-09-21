@@ -158,10 +158,52 @@ function atualizarInterface(){
     sideBtn.dataset.open=logado?"perfil":"cadastro";
   }
 }
-function iniciarJogo(game){
+let gameRunning=false;
+let gameAnimation=null;
+let gameKeys={};
+let gameState=null;
+function abrirJogo(game){
+  if(!usuarioLogado()){abrir("modalLogin");toast("Entre na sua conta para jogar.");return}
   fechar("modalJogo");
-  mostrarExtra(game,"🎮","Jogo iniciado para "+getUsuario().nome.split(" ")[0]+". Esta é a sessão de jogo da plataforma.");
-  toast("▶ "+game+" iniciado!");
+  $("#secInicio").classList.add("hidden");
+  $("#secExtra").classList.add("hidden");
+  $("#gameScreen").classList.remove("hidden");
+  $("#gameScreenTitle").textContent=game;
+  $("#gameStatus").textContent="Destrua os inimigos e sobreviva.";
+  $("#gameStartOverlay").classList.remove("hidden");
+  $("#gameOverOverlay").classList.add("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function iniciarJogo(game){abrirJogo(game)}
+function iniciarPartida(){
+  const canvas=$("#gameCanvas");
+  gameState={player:{x:canvas.width/2,y:canvas.height-75,w:28,h:28,speed:4.2,life:100,cooldown:0},bullets:[],enemies:[],score:0,spawn:0,fire:false};
+  gameRunning=true;$("#gameStartOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");atualizarHUD();cancelarAnimacao();gameLoop();
+}
+function cancelarAnimacao(){if(gameAnimation)cancelAnimationFrame(gameAnimation);gameAnimation=null}
+function atualizarHUD(){if(!gameState)return;$("#gameLife").textContent=Math.max(0,Math.floor(gameState.player.life));$("#gameScore").textContent=gameState.score}
+function atirar(){if(!gameRunning||!gameState||gameState.player.cooldown>0)return;gameState.bullets.push({x:gameState.player.x,y:gameState.player.y-18,w:5,h:15,speed:8});gameState.player.cooldown=10}
+function gameLoop(){
+  if(!gameRunning)return;
+  const canvas=$("#gameCanvas"),ctx=canvas.getContext("2d"),p=gameState.player;
+  ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#020914";ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle="rgba(30,120,190,.12)";
+  for(let x=0;x<canvas.width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
+  for(let y=0;y<canvas.height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
+  if(gameKeys["KeyW"]||gameKeys["ArrowUp"])p.y-=p.speed;if(gameKeys["KeyS"]||gameKeys["ArrowDown"])p.y+=p.speed;if(gameKeys["KeyA"]||gameKeys["ArrowLeft"])p.x-=p.speed;if(gameKeys["KeyD"]||gameKeys["ArrowRight"])p.x+=p.speed;
+  p.x=Math.max(18,Math.min(canvas.width-18,p.x));p.y=Math.max(18,Math.min(canvas.height-18,p.y));
+  if(gameKeys["Space"]||gameState.fire)atirar();if(p.cooldown>0)p.cooldown--;
+  gameState.spawn--;if(gameState.spawn<=0){gameState.enemies.push({x:30+Math.random()*(canvas.width-60),y:-25,w:25,h:25,speed:1.1+Math.random()*1.5,life:1});gameState.spawn=35}
+  for(const b of gameState.bullets)b.y-=b.speed;gameState.bullets=gameState.bullets.filter(b=>b.y>-30);
+  for(const e of gameState.enemies)e.y+=e.speed;
+  for(const b of gameState.bullets){for(const e of gameState.enemies){if(e.life>0&&Math.abs(b.x-e.x)<18&&Math.abs(b.y-e.y)<20){e.life=0;b.y=-100;gameState.score+=10}}}
+  for(const e of gameState.enemies){if(e.life>0&&Math.abs(p.x-e.x)<24&&Math.abs(p.y-e.y)<24){e.life=0;p.life-=20}if(e.y>canvas.height+30&&e.life>0){e.life=0;p.life-=5}}
+  gameState.enemies=gameState.enemies.filter(e=>e.life>0);
+  ctx.fillStyle="#1599ff";ctx.shadowBlur=18;ctx.shadowColor="#1599ff";ctx.fillRect(p.x-14,p.y-14,p.w,p.h);ctx.shadowBlur=0;
+  ctx.fillStyle="#75d1ff";for(const b of gameState.bullets)ctx.fillRect(b.x-2.5,b.y-8,b.w,b.h);
+  for(const e of gameState.enemies){ctx.fillStyle="#ff4757";ctx.shadowBlur=14;ctx.shadowColor="#ff3344";ctx.fillRect(e.x-12,e.y-12,e.w,e.h);ctx.shadowBlur=0}
+  atualizarHUD();if(p.life<=0){gameRunning=false;$("#finalScore").textContent=gameState.score;$("#gameOverOverlay").classList.remove("hidden");return}
+  gameAnimation=requestAnimationFrame(gameLoop);
 }
 function comprarProduto(nome,preco){
   if(!usuarioLogado()){abrir("modalLogin");toast("Entre na sua conta para comprar.");return}
@@ -241,3 +283,12 @@ $("#btnSair").addEventListener("click",()=>{
 if(localStorage.getItem("gamehubUsuario")&&!localStorage.getItem("gamehubSessao")){}
 
 atualizarInterface();
+
+$("#btnComecarPartida").addEventListener("click",iniciarPartida);
+$("#btnReiniciarPartida").addEventListener("click",iniciarPartida);
+$("#btnVoltarJogo").addEventListener("click",()=>{gameRunning=false;cancelarAnimacao();$("#gameScreen").classList.add("hidden");mostrarHome()});
+document.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code))e.preventDefault();gameKeys[e.code]=true});
+document.addEventListener("keyup",e=>{gameKeys[e.code]=false});
+$("#touchFire").addEventListener("pointerdown",()=>{if(gameState)gameState.fire=true});
+["pointerup","pointercancel","pointerleave"].forEach(ev=>$("#touchFire").addEventListener(ev,()=>{if(gameState)gameState.fire=false}));
+$$(".dpad [data-key]").forEach(b=>{const k=b.dataset.key;["pointerdown"].forEach(ev=>b.addEventListener(ev,()=>gameKeys[k]=true));["pointerup","pointercancel","pointerleave"].forEach(ev=>b.addEventListener(ev,()=>gameKeys[k]=false))});
