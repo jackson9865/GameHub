@@ -272,17 +272,19 @@ function comprarNave(id){
 function shipById(id){return shipCatalog.find(s=>s.id===id)||shipCatalog[0]}
 function shipProgress(id){
   const data=getShipSave();
-  if(!data.progress[id])data.progress[id]={level:1,xp:0};
+  if(!data.progress[id])data.progress[id]={level:1,xp:0,modules:{weapon:0,shield:0,engine:0,armor:0,cooling:0}};
+  data.progress[id].modules=data.progress[id].modules||{weapon:0,shield:0,engine:0,armor:0,cooling:0};
   return data.progress[id];
 }
 function formatCredits(n){return Number(n||0).toLocaleString("pt-BR")}
 function comprarNave(id){
   const ship=shipById(id),data=getShipSave();
   if(data.owned.includes(id)){selecionarNave(id);return}
-  if(data.credits<ship.price){toast("Créditos insuficientes para esta nave.");return}
+  if(data.maxPhase<ship.unlockPhase){toast("Nave bloqueada. Derrote o chefão da fase "+(ship.unlockPhase-1)+" para desbloqueá-la.");return}
+  if(data.credits<ship.price){toast("Créditos insuficientes para comprar esta nave.");return}
   data.credits-=ship.price;
   data.owned.push(id);
-  data.progress[id]={level:1,xp:0};
+  data.progress[id]={level:1,xp:0,modules:{weapon:0,shield:0,engine:0,armor:0,cooling:0}};
   saveShipData(data);
   selecionarNave(id);
   toast(ship.name+" desbloqueada!");
