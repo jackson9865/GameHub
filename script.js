@@ -304,8 +304,8 @@ function renderShipOptions(){
       '<div class="ship-combat-stats"><span>LASER</span><b>'+ship.damage.toFixed(2)+'</b><span>MÍSSEIS</span><b>'+Math.round(450+ship.damage*100)+'</b></div>'+
       '<span class="ship-price">'+price+'</span><button type="button" data-ship-action="'+ship.id+'" '+(available?"":"disabled")+'>'+action+'</button></article>';
   }).join("");
-  $(".ship-card").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
-  $("[data-ship-action]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();const id=btn.dataset.shipAction;const d=getShipSave();d.owned.includes(id)?selecionarNave(id):comprarNave(id)}));
+  $$(".ship-card").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
+  $$("[data-ship-action]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();const id=btn.dataset.shipAction;const d=getShipSave();d.owned.includes(id)?selecionarNave(id):comprarNave(id)}));
   atualizarSelecaoNave();
   renderUpgradePanel();
 }
@@ -321,7 +321,7 @@ function renderUpgradePanel(){
         '<small>'+m.desc+'</small><button type="button" data-upgrade="'+m.id+'" '+(locked?"disabled":"")+'>'+
         (locked?"MÁXIMO":"COMPRAR · "+formatCredits(cost)+" CR")+'</button></div>';
     }).join("")+'</div><p class="upgrade-note">Cada nave tem limite próprio de evolução. Depois do limite, os módulos comprados na oficina são necessários para continuar fortalecendo a nave.</p>';
-  $("[data-upgrade]").forEach(btn=>btn.addEventListener("click",()=>comprarUpgrade(ship.id,btn.dataset.upgrade)));
+  $$("[data-upgrade]").forEach(btn=>btn.addEventListener("click",()=>comprarUpgrade(ship.id,btn.dataset.upgrade)));
 }
 function selecionarNave(id){
   const data=getShipSave(),ship=shipById(id);
@@ -357,7 +357,7 @@ function abrirOficinaNave(id){
     const lv=p.modules[m.id]||0,cost=m.base*(lv+1),locked=lv>=3,need=3+lv,canLevel=p.level>=Math.min(need,ship.maxLevel),canBuy=data.credits>=cost&&canLevel&&!locked;
     return '<div class="workshop-upgrade"><b>'+m.icon+' '+m.name+' · NV. '+lv+'/3</b><small>'+m.desc+(canLevel?"":" · requer nível "+need)+'</small><button type="button" data-workshop-upgrade="'+m.id+'" '+(canBuy?"":"disabled")+'>'+ (locked?"MÁXIMO":canBuy?"MELHORAR · "+formatCredits(cost)+" CR":"BLOQUEADO") +'</button></div>';
   }).join("");
-  $("[data-workshop-upgrade]").forEach(btn=>btn.addEventListener("click",()=>{comprarUpgrade(ship.id,btn.dataset.workshopUpgrade);setTimeout(()=>abrirOficinaNave(ship.id),0)}));
+  $$("[data-workshop-upgrade]").forEach(btn=>btn.addEventListener("click",()=>{comprarUpgrade(ship.id,btn.dataset.workshopUpgrade);setTimeout(()=>abrirOficinaNave(ship.id),0)}));
 }
 function fecharOficina(){
   $("#shipWorkshopOverlay").classList.add("hidden");
@@ -367,7 +367,7 @@ function fecharOficina(){
 function atualizarSelecaoNave(){
   const ship=shipById(selectedShipId),p=shipProgress(ship.id),info=$("#selectedShipInfo");
   if(info)info.textContent=ship.name+" selecionada · Nível "+p.level+"/"+ship.maxLevel+" · XP "+p.xp+" · "+ship.desc;
-  $$(".ship-card").forEach(c=>c.classList.toggle("selected",c.dataset.shipCard===selectedShipId));
+  $$$(".ship-card").forEach(c=>c.classList.toggle("selected",c.dataset.shipCard===selectedShipId));
 }
 
 function audioStart(){
