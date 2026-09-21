@@ -41,8 +41,14 @@
       </div>
       <div class="top-actions">
         <button id="tema" class="icon-btn" title="Alternar tema">☀</button>
-        <button class="btn-login" data-open="login">Entrar</button>
-        <button class="btn-primary top-create" data-open="cadastro">Criar conta</button>
+        <div id="areaVisitante" class="visitor-actions">
+          <button class="btn-login" data-open="login">Entrar</button>
+          <button class="btn-primary top-create" data-open="cadastro">Criar conta</button>
+        </div>
+        <div id="areaUsuario" class="user-area hidden">
+          <span id="usuarioNome" class="user-name"></span>
+          <button id="btnSair" class="btn-logout" type="button">Sair</button>
+        </div>
       </div>
     </header>
 
@@ -173,8 +179,8 @@
   <div class="modal-box success">
     <div class="modal-icon">✅</div>
     <h2>Cadastro finalizado!</h2>
-    <p>Sua conta foi criada neste navegador.</p>
-    <button class="btn-primary full" id="irLogin">Logar agora</button>
+    <p>Sua conta foi criada e você já está conectado ao GameHub.</p>
+    <button class="btn-primary full" id="continuarGameHub">Começar a jogar</button>
   </div>
 </div>
 
@@ -184,7 +190,7 @@
     <div id="jogoIcon" class="modal-icon">🎮</div>
     <h2 id="jogoTitulo">Jogo</h2>
     <p id="jogoDescricao"></p>
-    <button class="btn-primary full" data-open="cadastro">Criar conta para jogar</button>
+    <button id="btnAcaoJogo" class="btn-primary full" type="button">Criar conta para jogar</button>
   </div>
 </div>
 
