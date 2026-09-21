@@ -120,6 +120,27 @@
       <div class="extra-box"><div id="extraIcon">🎮</div><h2 id="extraTitle">GameHub</h2><p id="extraText"></p><button class="btn-primary" data-open="cadastro">Criar conta</button></div>
     </section>
 
+    <section id="gameScreen" class="game-screen hidden">
+      <div class="game-topbar">
+        <button id="btnVoltarJogo" class="btn-secondary" type="button">← Voltar</button>
+        <div><strong id="gameScreenTitle">Warzone Elite</strong><span id="gameStatus">Destrua os inimigos e sobreviva.</span></div>
+        <div class="game-hud"><span>❤️ <b id="gameLife">100</b></span><span>🏆 <b id="gameScore">0</b></span></div>
+      </div>
+      <div class="game-stage">
+        <canvas id="gameCanvas" width="960" height="540"></canvas>
+        <div id="gameStartOverlay" class="game-overlay">
+          <div class="game-panel"><div class="modal-icon">⚔️</div><h2>Warzone Elite</h2><p>WASD para mover, ESPAÇO para atirar.<br>No celular, use os controles na tela.</p><button id="btnComecarPartida" class="btn-primary" type="button">Iniciar partida</button></div>
+        </div>
+        <div id="gameOverOverlay" class="game-overlay hidden">
+          <div class="game-panel"><div class="modal-icon">💥</div><h2>Fim de jogo</h2><p>Pontuação: <strong id="finalScore">0</strong></p><button id="btnReiniciarPartida" class="btn-primary" type="button">Jogar novamente</button></div>
+        </div>
+      </div>
+      <div class="touch-controls">
+        <div class="dpad"><button data-key="ArrowUp">▲</button><div><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div></div>
+        <button id="touchFire" class="fire-button" type="button">🔥<span>ATIRAR</span></button>
+      </div>
+    </section>
+
     <footer>GAMEHUB · Sua plataforma de jogos</footer>
   </main>
 </div>
