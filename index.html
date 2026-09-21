@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameHub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="telaInicial" class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🎮</div>
+      <div class="brand-name">GAME<span>HUB</span></div>
+      <div class="brand-subtitle">Sua plataforma de jogos</div>
+    </div>
+
+    <nav>
+      <button class="nav-item active" data-nav="inicio">⌂ <span>Início</span></button>
+      <button class="nav-item" data-nav="explorar">⌕ <span>Explorar</span></button>
+      <button class="nav-item" data-nav="biblioteca">🎮 <span>Biblioteca</span></button>
+      <button class="nav-item" data-nav="loja">🛒 <span>Loja</span></button>
+      <button class="nav-item" data-nav="comunidade">👥 <span>Comunidade</span></button>
+      <button class="nav-item" data-nav="conquistas">🏆 <span>Conquistas</span></button>
+      <button class="nav-item" data-nav="perfil">● <span>Meu Perfil</span></button>
+    </nav>
+
+    <div class="side-card">
+      <div>🎮</div>
+      <p>Jogue. Conecte-se.<br>Faça parte.</p>
+      <button class="btn-primary" data-open="cadastro">Criar conta</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div class="search">
+        <span>⌕</span>
+        <input id="busca" type="search" placeholder="Buscar jogos, categorias, novidades...">
+      </div>
+      <div class="top-actions">
+        <button id="tema" class="icon-btn" title="Alternar tema">☀</button>
+        <button class="btn-login" data-open="login">Entrar</button>
+        <button class="btn-primary top-create" data-open="cadastro">Criar conta</button>
+      </div>
+    </header>
+
+    <section id="secInicio" class="section">
+      <div class="hero">
+        <div class="hero-text">
+          <h1>DESCUBRA.<br>JOGUE.<br><span>EXPLORE.</span></h1>
+          <p>O seu mundo de jogos em um só lugar.<br>
+          Novos títulos, grandes aventuras e uma<br>
+          comunidade apaixonada por games.</p>
+          <div class="hero-buttons">
+            <button id="btnExplorar" class="btn-primary">🚀 Explorar</button>
+            <button class="btn-secondary" data-open="cadastro">♙ Criar conta</button>
+          </div>
+        </div>
+
+        <div class="hero-art">
+          <div class="moon"></div>
+          <div class="mountain m1"></div>
+          <div class="mountain m2"></div>
+          <div class="hero-symbol">⚔</div>
+
+          <div class="featured">
+            <span class="tag">JOGO EM DESTAQUE</span>
+            <h2>Void Legacy</h2>
+            <p>Um novo mundo espera por você.</p>
+            <small>Explore terras desconhecidas, enfrente criaturas sombrias e descubra os segredos de um universo em colapso.</small>
+            <button class="btn-primary small" data-game="Void Legacy">Ver mais →</button>
+            <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div><b>🎮</b><strong>+200</strong><small>Jogos Disponíveis</small></div>
+        <div><b>👥</b><strong>+50 mil</strong><small>Jogadores</small></div>
+        <div><b>🏆</b><strong>+1 mil</strong><small>Conquistas</small></div>
+        <div><b>★</b><strong>Avaliação 4.8</strong><small>Pela comunidade</small></div>
+      </div>
+
+      <div id="categorias" class="block">
+        <div class="heading"><h2>Categorias</h2><button id="verCategorias">Ver todas →</button></div>
+        <div class="categories">
+          <button data-cat="Ação">⚔<span>Ação</span></button>
+          <button data-cat="Aventura">🌲<span>Aventura</span></button>
+          <button data-cat="RPG">♙<span>RPG</span></button>
+          <button data-cat="Estratégia">♜<span>Estratégia</span></button>
+          <button data-cat="Esportes">⚽<span>Esportes</span></button>
+          <button data-cat="Corrida">🏎<span>Corrida</span></button>
+          <button data-cat="Indie">🕹<span>Indie</span></button>
+          <button data-cat="Simulação">🚜<span>Simulação</span></button>
+        </div>
+      </div>
+
+      <div id="jogos" class="block">
+        <div class="heading"><h2>Jogos em Destaque</h2><button id="verJogos">Ver todos →</button></div>
+        <div class="games">
+          <article data-title="Eternal Realms" data-cat="RPG Aventura"><div class="game-image g1">🏰</div><h3>Eternal Realms</h3><p>RPG · Aventura</p><button data-game="Eternal Realms">Ver jogo</button></article>
+          <article data-title="Speed Rush" data-cat="Corrida Esportes"><div class="game-image g2">🏎</div><h3>Speed Rush</h3><p>Corrida · Esportes</p><button data-game="Speed Rush">Ver jogo</button></article>
+          <article data-title="Warzone Elite" data-cat="Ação"><div class="game-image g3">⚔</div><h3>Warzone Elite</h3><p>Ação · Tiro</p><button data-game="Warzone Elite">Ver jogo</button></article>
+          <article data-title="Planet Explorer" data-cat="Simulação Aventura"><div class="game-image g4">🌌</div><h3>Planet Explorer</h3><p>Exploração · Simulação</p><button data-game="Planet Explorer">Ver jogo</button></article>
+          <article data-title="Pixel Quest" data-cat="Indie Aventura"><div class="game-image g5">🟩</div><h3>Pixel Quest</h3><p>Indie · Aventura</p><button data-game="Pixel Quest">Ver jogo</button></article>
+          <article data-title="Football Legends" data-cat="Esportes"><div class="game-image g6">⚽</div><h3>Football Legends</h3><p>Esportes · Competição</p><button data-game="Football Legends">Ver jogo</button></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="secExtra" class="extra-section hidden">
+      <div class="extra-box"><div id="extraIcon">🎮</div><h2 id="extraTitle">GameHub</h2><p id="extraText"></p><button class="btn-primary" data-open="cadastro">Criar conta</button></div>
+    </section>
+
+    <footer>GAMEHUB · Sua plataforma de jogos</footer>
+  </main>
+</div>
+
+<div id="modalLogin" class="modal">
+  <div class="modal-box">
+    <button class="close" data-close="modalLogin">×</button>
+    <div class="modal-icon">🎮</div>
+    <h2>Entrar no GameHub</h2>
+    <p>Acesse sua conta para continuar.</p>
+    <label>E-mail</label>
+    <input id="loginEmail" type="email" autocomplete="email" placeholder="seuemail@email.com">
+    <label>Senha</label>
+    <div class="password">
+      <input id="loginSenha" type="password" autocomplete="current-password" placeholder="Digite sua senha">
+      <button class="eye" data-target="loginSenha" aria-label="Mostrar senha">
+        <svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="slash" d="M4 4L20 20"/></svg>
+      </button>
+    </div>
+    <p id="loginErro" class="erro"></p>
+    <button id="btnLogin" class="btn-primary full">Entrar</button>
+    <button class="link" data-open="cadastro">Não tenho conta. Criar agora.</button>
+  </div>
+</div>
+
+<div id="modalCadastro" class="modal">
+  <div class="modal-box cadastro-box">
+    <button class="close" data-close="modalCadastro">×</button>
+    <div class="modal-icon">🚀</div>
+    <h2>Criar sua conta</h2>
+    <p>Preencha seus dados para entrar no GameHub.</p>
+
+    <div class="form-grid">
+      <div><label>Nome completo</label><input id="nome" type="text" autocomplete="name"></div>
+      <div><label>CPF</label><input id="cpf" maxlength="14" placeholder="000.000.000-00"></div>
+      <div><label>Data de nascimento</label><input id="nascimento" type="date"></div>
+      <div><label>Telefone</label><input id="telefone" type="tel" maxlength="15" autocomplete="tel" placeholder="(00) 00000-0000"></div>
+      <div class="full-col"><label>E-mail</label><input id="email" type="email" autocomplete="email"></div>
+      <div><label>CEP</label><input id="cep" maxlength="9" autocomplete="postal-code" placeholder="00000-000"></div>
+      <div><label>Número</label><input id="numero" type="text"></div>
+      <div class="full-col"><label>Rua / Avenida</label><input id="endereco" readonly></div>
+      <div><label>Complemento</label><input id="complemento"></div>
+      <div><label>Quadra</label><input id="quadra"></div>
+      <div><label>Lote</label><input id="lote"></div>
+      <div><label>Cidade</label><input id="cidade" readonly></div>
+      <div><label>Estado</label><select id="estado"><option value="">Selecione</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option></select></div>
+      <div><label>Senha</label><div class="password"><input id="senha" type="password" autocomplete="new-password"><button class="eye" data-target="senha" aria-label="Mostrar senha"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="slash" d="M4 4L20 20"/></svg></button></div></div>
+      <div><label>Confirmar senha</label><div class="password"><input id="confirmarSenha" type="password" autocomplete="new-password"><button class="eye" data-target="confirmarSenha" aria-label="Mostrar senha"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/><path class="slash" d="M4 4L20 20"/></svg></button></div></div>
+    </div>
+    <p id="cepStatus" class="status"></p>
+    <p id="cadastroErro" class="erro"></p>
+    <button id="btnCadastrar" class="btn-primary full">Cadastrar</button>
+  </div>
+</div>
+
+<div id="modalSucesso" class="modal">
+  <div class="modal-box success">
+    <div class="modal-icon">✅</div>
+    <h2>Cadastro finalizado!</h2>
+    <p>Sua conta foi criada neste navegador.</p>
+    <button class="btn-primary full" id="irLogin">Logar agora</button>
+  </div>
+</div>
+
+<div id="modalJogo" class="modal">
+  <div class="modal-box">
+    <button class="close" data-close="modalJogo">×</button>
+    <div id="jogoIcon" class="modal-icon">🎮</div>
+    <h2 id="jogoTitulo">Jogo</h2>
+    <p id="jogoDescricao"></p>
+    <button class="btn-primary full" data-open="cadastro">Criar conta para jogar</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
