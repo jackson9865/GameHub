@@ -174,6 +174,7 @@ let lastFrame=0;
 let selectedShipId="recruta";
 let audioCtx=null;
 let musicTimer=null;
+let engineTimer=null;
 let audioEnabled=true;
 
 function getShipSave(){
@@ -218,7 +219,7 @@ function renderShipOptions(){
   wrap.innerHTML=shipCatalog.map(ship=>{
     const owned=data.owned.includes(ship.id),p=shipProgress(ship.id),selected=ship.id===selectedShipId;
     const action=owned?"Selecionar":"Comprar";
-    const price=owned?"NAVE DESBLOQUEADA":"R$ "+ship.price.toFixed(2).replace(".",",");
+    const price=owned?"NAVE DESBLOQUEADA":formatCredits(ship.price)+" CRÉDITOS";
     return '<article class="ship-card '+(selected?"selected ":"")+(owned?"owned":"locked")+'" data-ship-card="'+ship.id+'">'+
       '<div class="ship-visual">'+ship.icon+'</div><h3>'+ship.name+'</h3><p>'+ship.desc+'</p>'+
       '<div class="ship-stats"><span>NV. '+p.level+'/'+ship.maxLevel+'</span><span>⚡ '+ship.speed.toFixed(1)+'</span><span>🛡 '+ship.shield+'</span></div>'+
@@ -258,6 +259,9 @@ function audioStart(){
         gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.48);
         osc.connect(gain).connect(audioCtx.destination);osc.start();osc.stop(audioCtx.currentTime+.5);
       },520);
+    }
+    if(!engineTimer){
+      engineTimer=setInterval(()=>{if(!audioEnabled||!audioCtx||gamePaused)return;audioTone(78,.18,"triangle",.012,58)},230);
     }
   }catch(e){}
 }
