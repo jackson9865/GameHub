@@ -5,6 +5,13 @@ function fechar(id){document.getElementById(id)?.classList.remove("open")}
 function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),2500)}
 
 document.addEventListener("click",e=>{
+  if(e.target.closest("#continuarGameHub")){
+    e.preventDefault();
+    fechar("modalSucesso");
+    mostrarHome();
+    toast("Tudo pronto. Você já pode jogar e comprar!");
+    return;
+  }
   const open=e.target.closest("[data-open]");
   if(open){
     if(open.dataset.open==="login"){fechar("modalCadastro");abrir("modalLogin")}
