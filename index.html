@@ -168,6 +168,35 @@
             </div>
           </div>
 
+          <div id="shipWorkshopOverlay" class="game-overlay hidden">
+            <div class="game-panel ship-workshop">
+              <div class="workshop-top">
+                <div>
+                  <span class="workshop-kicker">OFICINA DE COMBATE</span>
+                  <h2 id="workshopShipName">FALCON X</h2>
+                  <p id="workshopShipDesc">Configure sua nave antes de entrar na missão.</p>
+                </div>
+                <button id="btnVoltarHangar" class="hud-button" type="button">← HANGAR</button>
+              </div>
+              <div class="workshop-body">
+                <div class="workshop-ship-preview">
+                  <div class="workshop-ship-glow"></div>
+                  <img id="workshopShipImage" src="assets/game/ships/falcon.svg" alt="Nave selecionada">
+                  <div class="workshop-ship-status">NAVE SELECIONADA · PRONTA PARA MISSÃO</div>
+                </div>
+                <div class="workshop-data">
+                  <div class="workshop-stats" id="workshopShipStats"></div>
+                  <div class="workshop-section-title">MELHORIAS DISPONÍVEIS</div>
+                  <div class="workshop-upgrades" id="workshopUpgrades"></div>
+                </div>
+              </div>
+              <div class="workshop-footer">
+                <div class="workshop-credits">CRÉDITOS <strong id="workshopCredits">1.500</strong></div>
+                <button id="btnIniciarDaOficina" class="btn-primary" type="button">🚀 INICIAR COM ESTA NAVE</button>
+              </div>
+            </div>
+          </div>
+
           <div id="gamePauseOverlay" class="game-overlay hidden">
             <div class="game-panel">
               <div class="modal-icon">Ⅱ</div><h2>Jogo pausado</h2>
@@ -210,7 +239,7 @@
             <div><button data-key="ArrowLeft">◀</button><button data-key="ArrowDown">▼</button><button data-key="ArrowRight">▶</button></div>
           </div>
           <button id="touchFire" class="fire-button" type="button">➤<span>ATIRAR</span></button>
-          <button id="touchBomb" class="bomb-button" type="button">🚀<span>MÍSSIL</span></button>
+          <button id="touchBomb" class="bomb-button" type="button">🚀<span>MÍSSIL</span></button><small class="missile-hint">TECLA B</small>
         </div>
       </div>
     </section>
@@ -291,6 +320,6 @@
 
 <div id="toast" class="toast"></div>
 
-<script src="script.js?v=20260921-5"></script>
+<script src="script.js?v=20260921-6"></script>
 </body>
 </html>
