@@ -363,7 +363,8 @@ function fecharOficina(){
   $("#shipWorkshopOverlay").classList.add("hidden");
   $("#gameStartOverlay").classList.remove("hidden");
   renderShipOptions();
-}\nfunction atualizarSelecaoNave(){
+}
+function atualizarSelecaoNave(){
   const ship=shipById(selectedShipId),p=shipProgress(ship.id),info=$("#selectedShipInfo");
   if(info)info.textContent=ship.name+" selecionada · Nível "+p.level+"/"+ship.maxLevel+" · XP "+p.xp+" · "+ship.desc;
   $$(".ship-card").forEach(c=>c.classList.toggle("selected",c.dataset.shipCard===selectedShipId));
