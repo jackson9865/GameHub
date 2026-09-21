@@ -186,11 +186,7 @@ const galaxyBackgrounds=Array.from({length:5},(_,idx)=>{
   return img;
 });
 function currentGalaxyIndex(phase){
-  if(phase<=3)return 0;
-  if(phase<=6)return 1;
-  if(phase<=11)return 2;
-  if(phase<=19)return 3;
-  return 4;
+  return Math.max(0,(phase-1)%galaxyBackgrounds.length);
 }
 
 function getShipSave(){
