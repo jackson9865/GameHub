@@ -176,7 +176,6 @@ function abrirJogo(game){
   $("#gameOverOverlay").classList.add("hidden");
   $("#gameBossOverlay").classList.add("hidden");
   $("#bossTitle").textContent="FASE 1 — PREPARE-SE";
-  $("#gameScreenTitle")?.textContent=game;
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function iniciarJogo(game){abrirJogo(game)}
@@ -308,7 +307,7 @@ function drawPlayer(ctx,p){if(p.inv>0&&Math.floor(p.inv/4)%2===0)return;drawShip
 function drawBoss(ctx,b){drawShip(ctx,b.x,b.y,2.3,true,true);ctx.fillStyle="#ff344d";ctx.shadowBlur=20;ctx.shadowColor="#ff334d";ctx.beginPath();ctx.arc(b.x,b.y,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
 function gameLoop(now){
   if(!gameRunning)return;
-  if(gamePaused){gameAnimation=requestAnimationFrame(gameLoop);return}
+  if(gamePaused)return;
   const dt=Math.min(32,now-lastFrame);lastFrame=now;gameState.elapsed=now-gameState.startTime;
   const canvas=$("#gameCanvas"),ctx=canvas.getContext("2d"),p=gameState.player;
   drawBackground(ctx);
@@ -473,7 +472,10 @@ atualizarInterface();
 
 $("#btnComecarPartida").addEventListener("click",iniciarPartida);
 $("#btnReiniciarPartida").addEventListener("click",iniciarPartida);
-$("#btnVoltarJogo").addEventListener("click",()=>{gameRunning=false;cancelarAnimacao();$("#gameScreen").classList.add("hidden");mostrarHome()});
+$("#btnPausaJogo").addEventListener("click",alternarPausa);
+$("#btnContinuarPartida").addEventListener("click",alternarPausa);
+$("#touchBomb").addEventListener("click",usarBomba);
+$("#btnVoltarJogo").addEventListener("click",()=>{gameRunning=false;gamePaused=false;cancelarAnimacao();$("#gameScreen").classList.add("hidden");mostrarHome()});
 document.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code))e.preventDefault();gameKeys[e.code]=true});
 document.addEventListener("keyup",e=>{gameKeys[e.code]=false});
 $("#touchFire").addEventListener("pointerdown",()=>{if(gameState)gameState.fire=true});
