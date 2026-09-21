@@ -797,7 +797,9 @@ if(localStorage.getItem("gamehubUsuario")&&!localStorage.getItem("gamehubSessao"
 
 atualizarInterface();
 
-$("#btnComecarPartida").addEventListener("click",iniciarPartida);\n$("#btnVoltarHangar").addEventListener("click",fecharOficina);\n$("#btnIniciarDaOficina").addEventListener("click",iniciarPartida);
+$("#btnComecarPartida").addEventListener("click",iniciarPartida);
+$("#btnVoltarHangar").addEventListener("click",fecharOficina);
+$("#btnIniciarDaOficina").addEventListener("click",iniciarPartida);
 $("#btnReiniciarPartida").addEventListener("click",iniciarPartida);
 $("#btnPausaJogo").addEventListener("click",alternarPausa);
 $("#btnContinuarPartida").addEventListener("click",alternarPausa);
