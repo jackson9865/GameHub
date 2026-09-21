@@ -180,9 +180,21 @@ let audioCtx=null;
 let musicTimer=null;
 let engineTimer=null;
 let audioEnabled=true;
+const galaxyBackgrounds=Array.from({length:5},(_,idx)=>{
+  const img=new Image();
+  img.src="assets/game/backgrounds/galaxy-"+(idx+1)+".svg";
+  return img;
+});
+function currentGalaxyIndex(phase){
+  if(phase<=3)return 0;
+  if(phase<=6)return 1;
+  if(phase<=11)return 2;
+  if(phase<=19)return 3;
+  return 4;
+}
 
 function getShipSave(){
-  const base={credits:1500,owned:["recruta"],progress:{}};
+  const base={credits:1500,owned:["recruta"],progress:{},maxPhase:1};
   try{
     const saved=JSON.parse(localStorage.getItem("gamehubNaves")||"null");
     if(saved){
@@ -363,7 +375,7 @@ function abrirJogo(game){
   if(!usuarioLogado()){abrir("modalLogin");toast("Entre na sua conta para jogar.");return}
   fechar("modalJogo");
   $("#secInicio").classList.add("hidden");$("#secExtra").classList.add("hidden");$("#gameScreen").classList.remove("hidden");
-  $("#gameStartOverlay").classList.remove("hidden");$("#gamePauseOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");$("#gameBossOverlay").classList.add("hidden");
+  $("#gameStartOverlay").classList.remove("hidden");$("#gamePauseOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");$("#gameBossOverlay").classList.add("hidden");$("#gameUnlockOverlay").classList.add("hidden");
   selectedShipId=localStorage.getItem("gamehubNaveSelecionada")||"recruta";
   if(!getShipSave().owned.includes(selectedShipId))selectedShipId="recruta";
   renderShipOptions();
@@ -393,7 +405,7 @@ function iniciarPartida(){
     spawnTimer:16,boss:null,bossActive:false,phaseTransition:0,startTime:performance.now(),elapsed:0
   };
   gameRunning=true;gamePaused=false;lastFrame=performance.now();
-  $("#gameStartOverlay").classList.add("hidden");$("#gamePauseOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");$("#gameBossOverlay").classList.add("hidden");
+  $("#gameStartOverlay").classList.add("hidden");$("#gamePauseOverlay").classList.add("hidden");$("#gameOverOverlay").classList.add("hidden");$("#gameBossOverlay").classList.add("hidden");$("#gameUnlockOverlay").classList.add("hidden");
   audioStart();atualizarHUD();cancelarAnimacao();renderGame(lastFrame);gameAnimation=requestAnimationFrame(gameLoop);
 }
 function cancelarAnimacao(){if(gameAnimation)cancelAnimationFrame(gameAnimation);gameAnimation=null}
@@ -521,25 +533,17 @@ function explodeEnemy(e){
   if(gameState.phaseKills%5===0)gameState.multiplier=Math.min(8,gameState.multiplier+1);
 }
 function drawBackground(ctx,now){
-  const w=960,h=540;
+  const w=960,h=540,idx=currentGalaxyIndex(gameState.phase),img=galaxyBackgrounds[idx];
   ctx.clearRect(0,0,w,h);
-  const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,"#02030e");g.addColorStop(.45,"#07142d");g.addColorStop(1,"#020714");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-  const neb1=ctx.createRadialGradient(220,190,10,220,190,250);neb1.addColorStop(0,"rgba(50,112,255,.25)");neb1.addColorStop(.55,"rgba(80,35,180,.12)");neb1.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=neb1;ctx.fillRect(0,0,w,h);
-  const neb2=ctx.createRadialGradient(770,340,15,770,340,280);neb2.addColorStop(0,"rgba(15,176,255,.16)");neb2.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=neb2;ctx.fillRect(0,0,w,h);
-  // planetes/luas para dar a sensação de cenário espacial real, sem sobrecarregar a máquina
-  const planet=(x,y,r,a,ring=false)=>{
-    const pg=ctx.createRadialGradient(x-r*.35,y-r*.4,r*.08,x,y,r);
-    pg.addColorStop(0,"rgba(180,220,255,"+a+")");pg.addColorStop(.5,"rgba(50,100,180,"+(a*.65)+")");pg.addColorStop(1,"rgba(3,12,35,0)");
-    ctx.fillStyle=pg;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
-    if(ring){ctx.strokeStyle="rgba(92,175,255,.22)";ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(x,y,r*1.45,r*.32,-.18,0,Math.PI*2);ctx.stroke()}
-  };
-  planet(110,440,125,.75,true);planet(835,105,78,.38,false);planet(710,475,55,.26,true);
+  if(img&&img.complete&&img.naturalWidth){
+    ctx.drawImage(img,0,0,w,h);
+  }else{
+    const g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,"#02030e");g.addColorStop(.5,"#07142d");g.addColorStop(1,"#020714");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }
+  // profundidade adicional: estrelas leves sobre a arte, sem pesar no computador
   for(const st of gameState.stars){st.y+=st.s;if(st.y>h)st.y=0;ctx.globalAlpha=st.a;ctx.fillStyle="#e6f5ff";ctx.fillRect(st.x,st.y,st.r,st.r)}
   ctx.globalAlpha=1;
-  ctx.strokeStyle="rgba(72,142,220,.07)";ctx.lineWidth=1;
-  for(let x=0;x<w;x+=64){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
-  for(let y=0;y<h;y+=64){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
-  ctx.globalAlpha=1;
+  ctx.fillStyle="rgba(0,4,15,.12)";ctx.fillRect(0,0,w,h);
 }
 function drawPlayer(ctx,p,ship){
   if(p.inv>0&&Math.floor(p.inv/4)%2===0)return;
@@ -765,6 +769,7 @@ $("#btnReiniciarPartida").addEventListener("click",iniciarPartida);
 $("#btnPausaJogo").addEventListener("click",alternarPausa);
 $("#btnContinuarPartida").addEventListener("click",alternarPausa);
 $("#btnAudioJogo").addEventListener("click",toggleAudio);
+$("#btnContinuarDesbloqueio").addEventListener("click",continuarAposDesbloqueio);
 $("#touchBomb").addEventListener("click",usarBomba);
 $("#btnVoltarJogo").addEventListener("click",()=>{gameRunning=false;gamePaused=false;cancelarAnimacao();$("#gameScreen").classList.add("hidden");mostrarHome()});
 document.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code))e.preventDefault();gameKeys[e.code]=true});
