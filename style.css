@@ -107,3 +107,38 @@
 
 #gameCanvas{background:#020713 url("assets/game/backgrounds/galaxy-1.svg") center/cover no-repeat}
 #gameStartOverlay{background:rgba(1,7,18,.55)}
+
+/* ===== WARZONE ELITE — OFICINA DE NAVES ===== */
+#shipWorkshopOverlay{z-index:90;background:rgba(1,7,18,.92);backdrop-filter:blur(5px)}
+.ship-workshop{width:min(1050px,94vw);max-height:90vh;overflow:auto;padding:26px;background:linear-gradient(145deg,rgba(5,22,43,.98),rgba(2,10,24,.98));border:1px solid rgba(53,181,255,.48);box-shadow:0 0 55px rgba(0,136,255,.18)}
+.workshop-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:1px solid rgba(75,160,225,.18);padding-bottom:16px}
+.workshop-kicker{font-size:11px;letter-spacing:2px;color:#39c8ff;font-weight:900}
+.workshop-top h2{margin:5px 0 3px;font-size:30px;color:#f4fbff}
+.workshop-top p{color:#91aac3;font-size:13px}
+.workshop-body{display:grid;grid-template-columns:minmax(320px,42%) 1fr;gap:24px;padding:20px 0}
+.workshop-ship-preview{min-height:330px;border:1px solid rgba(61,154,220,.22);border-radius:16px;background:radial-gradient(circle at 50% 45%,rgba(0,178,255,.16),transparent 45%),#031122;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.workshop-ship-preview:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(50,150,220,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(50,150,220,.07) 1px,transparent 1px);background-size:34px 34px;transform:perspective(500px) rotateX(55deg) scale(1.5);transform-origin:center bottom}
+.workshop-ship-glow{position:absolute;width:220px;height:120px;border-radius:50%;background:rgba(18,190,255,.22);filter:blur(30px)}
+#workshopShipImage{position:relative;width:min(88%,430px);height:230px;object-fit:contain;filter:drop-shadow(0 0 22px rgba(35,190,255,.45));animation:workshopFloat 3.2s ease-in-out infinite}
+@keyframes workshopFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}}
+.workshop-ship-status{position:relative;font-size:10px;letter-spacing:1.4px;color:#53d6ff;border:1px solid rgba(53,211,255,.22);padding:8px 12px;border-radius:999px;background:rgba(0,30,55,.7)}
+.workshop-data{min-width:0}
+.workshop-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.workshop-stat{border:1px solid rgba(64,143,208,.18);border-radius:10px;background:#061a30;padding:12px}
+.workshop-stat small{display:block;color:#7190ad;font-size:10px;letter-spacing:1px}
+.workshop-stat strong{display:block;margin-top:4px;color:#eaf7ff;font-size:18px}
+.workshop-stat .bar{height:5px;border-radius:99px;background:#0b2944;margin-top:8px;overflow:hidden}.workshop-stat .bar i{display:block;height:100%;background:linear-gradient(90deg,#078fff,#55e8ff);border-radius:99px}
+.workshop-section-title{font-size:11px;letter-spacing:1.7px;color:#5fd6ff;font-weight:900;margin:5px 0 10px}
+.workshop-upgrades{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.workshop-upgrade{padding:11px;border:1px solid rgba(58,126,184,.18);background:#06182b;border-radius:10px}
+.workshop-upgrade b{display:block;font-size:12px}.workshop-upgrade small{display:block;color:#839ab2;margin:4px 0 8px;font-size:10px}
+.workshop-upgrade button{width:100%;height:31px;border:1px solid rgba(46,153,231,.42);border-radius:6px;background:#082746;color:#bdeaff;font-size:10px;font-weight:800}
+.workshop-upgrade button:hover{background:#0b3961}.workshop-upgrade button:disabled{opacity:.45;cursor:not-allowed}
+.workshop-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;border-top:1px solid rgba(75,160,225,.18);padding-top:16px}
+.workshop-credits{font-size:11px;color:#7893ad;letter-spacing:1px}.workshop-credits strong{color:#48d3ff;font-size:18px;margin-left:5px}
+.missile-hint{position:absolute;bottom:18px;right:92px;color:#69cfff;font-size:9px;letter-spacing:1px;background:rgba(2,13,28,.82);padding:5px 8px;border:1px solid rgba(70,170,230,.25);border-radius:5px}
+@media(max-width:850px){.workshop-body{grid-template-columns:1fr}.workshop-ship-preview{min-height:250px}.workshop-upgrades{grid-template-columns:1fr}.workshop-footer{flex-direction:column;align-items:stretch}.missile-hint{display:none}}
+/* ===== ARTE DAS NAVES ===== */
+.ship-visual{height:130px!important;background:radial-gradient(circle,rgba(17,167,255,.13),transparent 65%)!important}
+.ship-visual img{width:100%;height:120px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(39,188,255,.4));transition:transform .25s ease,filter .25s ease}
+.ship-card:hover .ship-visual img,.ship-card.selected .ship-visual img{transform:scale(1.08);filter:drop-shadow(0 0 22px rgba(49,213,255,.65))}
