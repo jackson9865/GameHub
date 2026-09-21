@@ -308,7 +308,7 @@ function renderShipOptions(){
       '<div class="ship-combat-stats"><span>LASER</span><b>'+ship.damage.toFixed(2)+'</b><span>MÍSSEIS</span><b>'+Math.round(450+ship.damage*100)+'</b></div>'+
       '<span class="ship-price">'+price+'</span><button type="button" data-ship-action="'+ship.id+'" '+(available?"":"disabled")+'>'+action+'</button></article>';
   }).join("");
-  $$(".ship-card").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
+  $$$(".ship-card").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
   $$("[data-ship-action]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();const id=btn.dataset.shipAction;const d=getShipSave();d.owned.includes(id)?selecionarNave(id):comprarNave(id)}));
   atualizarSelecaoNave();
   renderUpgradePanel();
@@ -371,7 +371,7 @@ function fecharOficina(){
 function atualizarSelecaoNave(){
   const ship=shipById(selectedShipId),p=shipProgress(ship.id),info=$("#selectedShipInfo");
   if(info)info.textContent=ship.name+" selecionada · Nível "+p.level+"/"+ship.maxLevel+" · XP "+p.xp+" · "+ship.desc;
-  $(".ship-card").forEach(c=>c.classList.toggle("selected",c.dataset.shipCard===selectedShipId));
+  $$(".ship-card").forEach(c=>c.classList.toggle("selected",c.dataset.shipCard===selectedShipId));
 }
 
 function audioStart(){
