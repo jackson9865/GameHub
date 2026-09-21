@@ -159,14 +159,14 @@ function atualizarInterface(){
   }
 }
 const shipCatalog=[
-  {id:"recruta",name:"RECRUTA",price:0,maxLevel:5,desc:"Nave inicial equilibrada. Ideal para aprender.",speed:5.0,damage:1.0,life:100,shield:60,fire:9,style:"scout"},
-  {id:"falcon",name:"FALCON X",price:990,maxLevel:10,desc:"Caça veloz com dois canhões laterais.",speed:6.2,damage:1.25,life:110,shield:75,fire:8,style:"falcon"},
-  {id:"phantom",name:"PHANTOM",price:1990,maxLevel:15,desc:"Caça furtivo de alta cadência.",speed:6.6,damage:1.5,life:115,shield:95,fire:7,style:"phantom"},
-  {id:"titan",name:"TITAN",price:3990,maxLevel:20,desc:"Nave pesada com blindagem reforçada.",speed:4.8,damage:2.0,life:155,shield:135,fire:10,style:"titan"},
-  {id:"nova",name:"NOVA STRIKE",price:5990,maxLevel:25,desc:"Artilharia orbital de precisão.",speed:5.7,damage:2.25,life:145,shield:120,fire:8,style:"nova"},
-  {id:"viper",name:"VIPER",price:7990,maxLevel:30,desc:"Interceptor extremo, rápido e agressivo.",speed:7.0,damage:2.05,life:125,shield:110,fire:6,style:"viper"},
-  {id:"guardian",name:"GUARDIAN",price:9990,maxLevel:35,desc:"Fortaleza móvel com escudo colossal.",speed:4.3,damage:2.35,life:210,shield:190,fire:11,style:"guardian"},
-  {id:"eclipse",name:"ECLIPSE",price:14990,maxLevel:40,desc:"Nave de elite para as fases avançadas.",speed:6.0,damage:2.8,life:180,shield:165,fire:7,style:"eclipse"}
+  {id:"recruta",name:"RECRUTA",price:0,unlockPhase:1,maxLevel:5,desc:"Nave inicial equilibrada. Ideal para aprender.",speed:5.0,damage:1.0,life:100,shield:60,fire:9,style:"recruta"},
+  {id:"falcon",name:"FALCON X",price:990,unlockPhase:2,maxLevel:10,desc:"Caça veloz com dois canhões laterais.",speed:6.2,damage:1.25,life:110,shield:75,fire:8,style:"falcon"},
+  {id:"phantom",name:"PHANTOM",price:1990,unlockPhase:4,maxLevel:15,desc:"Caça furtivo de alta cadência.",speed:6.6,damage:1.5,life:115,shield:95,fire:7,style:"phantom"},
+  {id:"titan",name:"TITAN",price:3990,unlockPhase:7,maxLevel:20,desc:"Nave pesada para enfrentar chefões.",speed:4.8,damage:2.0,life:155,shield:135,fire:10,style:"titan"},
+  {id:"nova",name:"NOVA STRIKE",price:5990,unlockPhase:12,maxLevel:25,desc:"Artilharia orbital de precisão.",speed:5.7,damage:2.25,life:145,shield:120,fire:8,style:"nova"},
+  {id:"viper",name:"VIPER",price:7990,unlockPhase:20,maxLevel:30,desc:"Interceptor extremo, rápido e agressivo.",speed:7.0,damage:2.05,life:125,shield:110,fire:6,style:"viper"},
+  {id:"guardian",name:"GUARDIAN",price:9990,unlockPhase:35,maxLevel:35,desc:"Fortaleza móvel com escudo colossal.",speed:4.3,damage:2.35,life:210,shield:190,fire:11,style:"guardian"},
+  {id:"eclipse",name:"ECLIPSE",price:14990,unlockPhase:50,maxLevel:40,desc:"Nave de elite para as fases avançadas.",speed:6.0,damage:2.8,life:180,shield:165,fire:7,style:"eclipse"}
 ];
 
 let gameRunning=false;
@@ -188,7 +188,7 @@ function getShipSave(){
     if(saved){
       saved.credits=Number.isFinite(saved.credits)?saved.credits:1500;
       saved.owned=Array.isArray(saved.owned)?saved.owned:["recruta"];
-      saved.progress=saved.progress||{};
+      saved.progress=saved.progress||{};saved.maxPhase=Number.isFinite(saved.maxPhase)?Math.max(1,saved.maxPhase):1;
       if(!saved.owned.includes("recruta"))saved.owned.unshift("recruta");
       return saved;
     }
@@ -236,7 +236,8 @@ function comprarUpgrade(shipId,moduleId){
 function comprarNave(id){
   const ship=shipById(id),data=getShipSave();
   if(data.owned.includes(id)){selecionarNave(id);return}
-  if(data.credits<ship.price){toast("Créditos insuficientes para esta nave.");return}
+  if(data.maxPhase<ship.unlockPhase){toast("Nave bloqueada. Derrote o chefão da fase "+(ship.unlockPhase-1)+" para desbloqueá-la.");return}
+  if(data.credits<ship.price){toast("Créditos insuficientes para comprar esta nave.");return}
   data.credits-=ship.price;
   data.owned.push(id);
   data.progress[id]={level:1,xp:0,modules:{weapon:0,shield:0,engine:0,armor:0,cooling:0}};
@@ -268,15 +269,18 @@ function renderShipOptions(){
   const data=getShipSave();
   $("#shipCredits").textContent=formatCredits(data.credits);
   wrap.innerHTML=shipCatalog.map(ship=>{
-    const owned=data.owned.includes(ship.id),p=shipProgress(ship.id),selected=ship.id===selectedShipId;
-    const action=owned?"Selecionar":"Comprar";
-    const price=owned?"NAVE DESBLOQUEADA":formatCredits(ship.price)+" CRÉDITOS";
-    return '<article class="ship-card '+(selected?"selected ":"")+(owned?"owned":"locked")+'" data-ship-card="'+ship.id+'">'+
-      '<div class="ship-visual"><span class="ship-art ship-art-'+ship.style+'"></span></div><h3>'+ship.name+'</h3><p>'+ship.desc+'</p>'+
-      '<div class="ship-stats"><span>NV. '+p.level+'/'+ship.maxLevel+'</span><span>⚡ '+ship.speed.toFixed(1)+'</span><span>🛡 '+ship.shield+'</span></div>'+
-      '<span class="ship-price">'+price+'</span><button type="button" data-ship-action="'+ship.id+'">'+action+'</button></article>';
+    const owned=data.owned.includes(ship.id),available=data.maxPhase>=ship.unlockPhase;
+    const p=shipProgress(ship.id),selected=ship.id===selectedShipId;
+    const action=owned?"Selecionar":available?"Comprar":"BLOQUEADA";
+    const price=owned?"NAVE DESBLOQUEADA":available?formatCredits(ship.price)+" CRÉDITOS":"LIBERA NA FASE "+ship.unlockPhase;
+    const image="assets/game/ships/"+ship.style+".svg";
+    return '<article class="ship-card '+(selected?"selected ":"")+(owned?"owned ":"")+(available?"":"phase-locked")+'" data-ship-card="'+ship.id+'">'+
+      '<div class="ship-visual"><img src="'+image+'" alt="'+ship.name+'"></div><h3>'+ship.name+'</h3><p>'+ship.desc+'</p>'+
+      '<div class="ship-stats"><span>NV. '+p.level+'/'+ship.maxLevel+'</span><span>⚡ '+ship.speed.toFixed(1)+'</span><span>☄ DANO '+ship.damage.toFixed(2)+'</span><span>🛡 '+ship.shield+'</span></div>'+
+      '<div class="ship-combat-stats"><span>LASER</span><b>'+ship.damage.toFixed(2)+'</b><span>MÍSSEIS</span><b>'+Math.round(450+ship.damage*100)+'</b></div>'+
+      '<span class="ship-price">'+price+'</span><button type="button" data-ship-action="'+ship.id+'" '+(available?"":"disabled")+'>'+action+'</button></article>';
   }).join("");
-  $("[data-ship-card]").forEach(card=>card.addEventListener("click",()=>selecionarNave(card.dataset.shipCard)));
+  $("[data-ship-card]").forEach(card=>card.addEventListener("click",()=>{if(!card.classList.contains("phase-locked"))selecionarNave(card.dataset.shipCard)}));
   $("[data-ship-action]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();const id=btn.dataset.shipAction;const d=getShipSave();d.owned.includes(id)?selecionarNave(id):comprarNave(id)}));
   atualizarSelecaoNave();
   renderUpgradePanel();
@@ -296,7 +300,8 @@ function renderUpgradePanel(){
   $("[data-upgrade]").forEach(btn=>btn.addEventListener("click",()=>comprarUpgrade(ship.id,btn.dataset.upgrade)));
 }
 function selecionarNave(id){
-  const data=getShipSave();
+  const data=getShipSave(),ship=shipById(id);
+  if(data.maxPhase<ship.unlockPhase){toast("Esta nave será desbloqueada após o chefão da fase "+(ship.unlockPhase-1)+".");return}
   if(!data.owned.includes(id)){comprarNave(id);return}
   selectedShipId=id;
   localStorage.setItem("gamehubNaveSelecionada",id);
@@ -373,7 +378,7 @@ function iniciarPartida(){
   for(let i=0;i<110;i++)stars.push({x:Math.random()*960,y:Math.random()*540,r:.5+Math.random()*1.8,s:.15+Math.random()*1.2,a:.3+Math.random()*.7});
   const mods=prog.modules||{weapon:0,shield:0,engine:0,armor:0,cooling:0};
   gameState={
-    phase:1,maxPhase:1000,phaseKills:0,targetKills:60,score:0,
+    phase:1,maxPhase:1000,phaseKills:0,targetKills:120,score:0,
     life:ship.life+(prog.level-1)*7+mods.armor*12,
     shield:ship.shield+(prog.level-1)*5+mods.shield*18,
     bombs:3,multiplier:1,waveNumber:0,waveCooldown:20,
@@ -406,15 +411,15 @@ function renderGame(now){
 }
 function iniciarNovaFase(){
   if(gameState.phase>=gameState.maxPhase){fimDeJogo(true);return}
-  gameState.phase++;gameState.phaseKills=0;gameState.targetKills=Math.min(60+Math.floor(gameState.phase*7),140);
+  gameState.phase++;gameState.phaseKills=0;gameState.targetKills=Math.min(120+Math.floor(gameState.phase*12),260);
   gameState.waveNumber=0;gameState.waveCooldown=28;
   gameState.boss=null;gameState.bossActive=false;gameState.spawnTimer=22;
   $("#gameBossOverlay").classList.add("hidden");$("#bossTitle").textContent="FASE "+gameState.phase+" / "+gameState.maxPhase;
 }
 function iniciarChefe(){
   gameState.bossActive=true;
-  const hp=900+gameState.phase*150;
-  gameState.boss={x:480,y:85,hp,maxHp:hp,w:190,h:120,speed:1.15+gameState.phase*.01,dir:1,cooldown:42,shield:220+gameState.phase*35,maxShield:220+gameState.phase*35};
+  const hp=2400+gameState.phase*260;
+  gameState.boss={x:480,y:85,hp,maxHp:hp,w:190,h:120,speed:1.15+gameState.phase*.01,dir:1,cooldown:42,shield:700+gameState.phase*65,maxShield:700+gameState.phase*65};
   gameState.enemies=[];
   $("#bossTitle").textContent="CHEFÃO — TITAN ENEMY";
   $("#gameBossOverlay").classList.remove("hidden");
@@ -426,6 +431,7 @@ function atualizarHUD(){
   $("#gameScore").textContent=gameState.score.toLocaleString("pt-BR");
   $("#gamePhase").textContent=gameState.phase+" / "+gameState.maxPhase;
   $("#gameEnemies").textContent=gameState.bossActive?"CHEFÃO":Math.max(0,gameState.targetKills-gameState.phaseKills);
+  const progressEl=$("#gameWaveProgress");if(progressEl)progressEl.textContent=gameState.bossActive?"BATALHA DO CHEFÃO":"ONDAS "+gameState.waveNumber+" · "+gameState.phaseKills+"/"+gameState.targetKills;
   $("#gameBombs").textContent=gameState.bombs;
   $("#gameMultiplier").textContent="x"+gameState.multiplier;
   $("#gameShipLevel").textContent=shipById(gameState.shipId).name+" · "+gameState.shipLevel+"/"+gameState.shipMaxLevel;
@@ -445,7 +451,7 @@ function spawnEnemy(){
   gameState.enemies.push({x:35+Math.random()*890,y:-45,targetY:90+Math.random()*120,w:38,h:32,speed:1.0+Math.random()*1.1+level*.012,life:hp,maxLife:hp,type,shoot:60+Math.random()*100,phase:Math.random()*6.28,formation:false});
 }
 function spawnFormation(){
-  const count=6+Math.floor(Math.random()*4);
+  const count=8+Math.floor(Math.random()*5);
   const cols=Math.min(6,count),rows=Math.ceil(count/cols);
   const gapX=105,gapY=58,startX=480-(cols-1)*gapX/2,startY=-60;
   const level=gameState.phase;
@@ -476,11 +482,14 @@ function atirar(){
 }
 function usarBomba(){
   if(!gameRunning||gamePaused||!gameState||gameState.bombs<=0)return;
-  gameState.bombs--;addParticle(480,270,"#72d8ff",65);audioTone(90,.6,"sawtooth",.12,25);
+  gameState.bombs--;addParticle(gameState.player.x,gameState.player.y,"#72d8ff",75);audioTone(90,.6,"sawtooth",.12,25);
   for(const e of gameState.enemies){e.life=0;gameState.score+=35*gameState.multiplier;sfxExplosion()}
   if(gameState.boss){
-    if(gameState.boss.shield>0)gameState.boss.shield=Math.max(0,gameState.boss.shield-(180+gameState.phase*12));
-    else gameState.boss.hp=Math.max(0,gameState.boss.hp-(180+gameState.phase*12));
+    const missileDamage=450+Math.round(shipById(gameState.shipId).damage*100)+gameState.phase*20;
+    if(gameState.boss.shield>0)gameState.boss.shield=Math.max(0,gameState.boss.shield-missileDamage);
+    else gameState.boss.hp=Math.max(0,gameState.boss.hp-missileDamage);
+    addParticle(gameState.boss.x,gameState.boss.y,"#65eaff",55);
+    toast("MÍSSIL ACERTADO: -"+missileDamage+" no chefão");
   }
   atualizarHUD();
 }
@@ -499,7 +508,7 @@ function hitPlayer(dmg){
   addParticle(p.x,p.y,"#64c9ff",15);sfxHit();
 }
 function gainXP(amount){
-  const data=getShipSave(),p=data.progress[gameState.shipId]||{level:1,xp:0},ship=shipById(gameState.shipId);
+  const data=getShipSave(),p=data.progress[gameState.shipId]||{level:1,xp:0,modules:{}},ship=shipById(gameState.shipId);
   if(p.level>=ship.maxLevel){p.xp=0;data.progress[gameState.shipId]=p;saveShipData(data);return}
   p.xp+=amount;
   let leveled=false;
@@ -588,7 +597,7 @@ function gameLoop(now){
 
   if(!gameState.bossActive){
     gameState.spawnTimer--;
-    if(gameState.phaseKills<gameState.targetKills&&gameState.spawnTimer<=0){spawnFormation();gameState.spawnTimer=Math.max(38,72-gameState.phase*.03)}
+    if(gameState.phaseKills<gameState.targetKills&&gameState.spawnTimer<=0){spawnFormation();gameState.spawnTimer=Math.max(44,78-gameState.phase*.02)}
     if(gameState.phaseKills>=gameState.targetKills&&gameState.enemies.length===0&&gameState.waveCooldown<=0)iniciarChefe();
     if(gameState.waveCooldown>0)gameState.waveCooldown--;
   }else if(gameState.boss){
@@ -625,10 +634,22 @@ function gameLoop(now){
   gameState.enemies=gameState.enemies.filter(e=>e.life>0);
 
   if(gameState.boss&&gameState.boss.hp<=0){
-    const bx=gameState.boss.x,by=gameState.boss.y;gameState.score+=1000*gameState.multiplier;gainXP(45+gameState.phase*3);addParticle(bx,by,"#ff7048",90);sfxBossExplosion();
+    const defeatedPhase=gameState.phase,bx=gameState.boss.x,by=gameState.boss.y;
+    gameState.score+=1000*gameState.multiplier;gainXP(45+gameState.phase*3);addParticle(bx,by,"#ff7048",120);sfxBossExplosion();
     gameState.boss=null;gameState.bossActive=false;
+    const data=getShipSave();
+    data.maxPhase=Math.max(data.maxPhase,defeatedPhase+1);
+    data.credits+=(600+defeatedPhase*120);
+    saveShipData(data);
+    const unlocked=shipCatalog.filter(sh=>sh.unlockPhase===defeatedPhase+1&&!data.owned.includes(sh.id));
+    if(unlocked.length){
+      unlocked.forEach(sh=>{data.owned.push(sh.id);data.progress[sh.id]={level:1,xp:0,modules:{weapon:0,shield:0,engine:0,armor:0,cooling:0}}});
+      saveShipData(data);
+      mostrarDesbloqueioNave(unlocked[0],600+defeatedPhase*120);
+      gameState.phaseTransition=0;gamePaused=true;return;
+    }
     if(gameState.phase>=gameState.maxPhase){fimDeJogo(true);return}
-    gameState.phaseTransition=85;
+    gameState.phaseTransition=120;
   }
   if(gameState.phaseTransition>0){gameState.phaseTransition--;if(gameState.phaseTransition===1)iniciarNovaFase()}
   for(const q of gameState.particles){q.x+=q.vx;q.y+=q.vy;q.vx*=.985;q.vy*=.985;q.life--}
@@ -636,6 +657,18 @@ function gameLoop(now){
   renderGame(now);atualizarHUD();
   if(gameState.life<=0){fimDeJogo(false);return}
   gameAnimation=requestAnimationFrame(gameLoop);
+}
+function mostrarDesbloqueioNave(ship,reward){
+  const overlay=$("#gameUnlockOverlay");if(!overlay)return;
+  $("#unlockShipName").textContent=ship.name;
+  $("#unlockShipImage").src="assets/game/ships/"+ship.style+".svg";
+  $("#unlockShipText").textContent="Parabéns pela conquista! Você derrotou o chefão e acabou de desbloquear a "+ship.name+".";
+  $("#unlockShipStats").textContent="LASER "+ship.damage.toFixed(2)+" · ESCUDO "+ship.shield+" · MÍSSEIS "+Math.round(450+ship.damage*100)+" · RECOMPENSA +"+formatCredits(reward)+" CRÉDITOS";
+  overlay.classList.remove("hidden");
+}
+function continuarAposDesbloqueio(){
+  $("#gameUnlockOverlay").classList.add("hidden");
+  gamePaused=false;iniciarNovaFase();
 }
 function fimDeJogo(vitoria){
   gameRunning=false;cancelarAnimacao();
@@ -736,6 +769,7 @@ $("#touchBomb").addEventListener("click",usarBomba);
 $("#btnVoltarJogo").addEventListener("click",()=>{gameRunning=false;gamePaused=false;cancelarAnimacao();$("#gameScreen").classList.add("hidden");mostrarHome()});
 document.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space"].includes(e.code))e.preventDefault();gameKeys[e.code]=true});
 document.addEventListener("keyup",e=>{gameKeys[e.code]=false});
+document.addEventListener("keydown",e=>{if(e.code==="KeyB")usarBomba()});
 $("#touchFire").addEventListener("pointerdown",()=>{if(gameState)gameState.fire=true});
 ["pointerup","pointercancel","pointerleave"].forEach(ev=>$("#touchFire").addEventListener(ev,()=>{if(gameState)gameState.fire=false}));
 $$(".dpad [data-key]").forEach(b=>{const k=b.dataset.key;["pointerdown"].forEach(ev=>b.addEventListener(ev,()=>gameKeys[k]=true));["pointerup","pointercancel","pointerleave"].forEach(ev=>b.addEventListener(ev,()=>gameKeys[k]=false))});
