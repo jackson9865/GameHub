@@ -83,13 +83,13 @@
 
 /* Warzone 2.0: hangar visual e conquistas */
 .game-overlay{z-index:50;background:rgba(1,7,18,.88);backdrop-filter:blur(4px)}
-.ship-selection-panel{width:min(1180px,94vw);max-height:88vh;overflow-y:auto;padding:24px 28px}
-.ship-options{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:14px}
-.ship-card{min-height:255px;position:relative;overflow:hidden}
+.ship-selection-panel{width:min(900px,94vw);max-height:88vh;overflow-y:auto;padding:20px 22px}
+.ship-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ship-card{min-height:245px;position:relative;overflow:hidden}
 .ship-card.phase-locked{filter:saturate(.25);opacity:.7}
 .ship-card.phase-locked:before{content:"🔒";position:absolute;right:12px;top:10px;font-size:20px;z-index:3}
 .ship-visual{height:105px;display:flex;align-items:center;justify-content:center}
-.ship-visual img{width:125px;height:92px;object-fit:contain;filter:drop-shadow(0 0 13px rgba(52,190,255,.6))}
+.ship-visual img{width:112px;height:82px;object-fit:contain;filter:drop-shadow(0 0 13px rgba(52,190,255,.6))}
 .ship-card.phase-locked .ship-visual img{filter:grayscale(1) brightness(.55)}
 .ship-combat-stats{display:grid;grid-template-columns:1fr auto;gap:3px 8px;margin:8px 0;color:#7ea0bd;font-size:9px;text-align:left}
 .ship-combat-stats b{color:#dff8ff;text-align:right}
@@ -101,6 +101,6 @@
 #unlockShipName{font-size:30px;letter-spacing:2px}
 #unlockShipText{color:#a8c0d5}
 #unlockShipStats{display:block;margin:15px 0;color:#68d9ff;font-size:11px;letter-spacing:.7px}
-@media(max-width:1100px){.ship-options{grid-template-columns:repeat(3,minmax(180px,1fr))}.upgrade-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){.ship-options{grid-template-columns:repeat(2,minmax(150px,1fr))}.upgrade-grid{grid-template-columns:repeat(2,1fr)}.ship-selection-panel{padding:18px}}
+@media(max-width:1100px){.ship-options{grid-template-columns:repeat(3,minmax(150px,1fr))}.upgrade-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.ship-options{grid-template-columns:repeat(2,minmax(130px,1fr))}.upgrade-grid{grid-template-columns:repeat(2,1fr)}.ship-selection-panel{padding:18px}}
 @media(max-width:520px){.ship-options{grid-template-columns:1fr}}
