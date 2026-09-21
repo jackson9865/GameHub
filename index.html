@@ -133,7 +133,7 @@
         </div>
 
         <div class="warzone-actions">
-          <button id="btnPausaJogo" type="button" class="hud-button">Ⅱ</button>
+          <button id="btnAudioJogo" type="button" class="hud-button" title="Som">🔊</button><button id="btnPausaJogo" type="button" class="hud-button">Ⅱ</button>
           <button id="btnVoltarJogo" type="button" class="hud-button">MENU</button>
         </div>
 
@@ -141,7 +141,7 @@
           <div class="hud-label">VIDA</div><div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
           <div class="hud-label shield-label">ESCUDO</div><div class="bars shield"><i></i><i></i><i></i><i></i><i></i><i></i></div>
           <div class="hud-value"><small>PONTUAÇÃO</small><b id="gameScore">0</b></div>
-          <div class="hud-value compact"><small>FASE</small><b id="gamePhase">1 / 1000</b></div>
+          <div class="hud-value compact"><small>FASE</small><b id="gamePhase">1 / 1000</b></div><div class="hud-value compact"><small>NAVE / NÍVEL</small><b id="gameShipLevel">—</b></div>
           <div class="hud-value compact"><small>INIMIGOS</small><b id="gameEnemies">0</b></div>
         </aside>
 
@@ -156,11 +156,14 @@
           <canvas id="gameCanvas" width="960" height="540"></canvas>
 
           <div id="gameStartOverlay" class="game-overlay">
-            <div class="game-panel">
+            <div class="game-panel ship-selection-panel">
               <div class="modal-icon">🚀</div>
-              <h2>Warzone Elite</h2>
-              <p>Prepare sua nave. São <strong>1000 fases</strong>, inimigos cada vez mais difíceis e um chefão ao final de cada fase.</p>
-              <button id="btnComecarPartida" class="btn-primary" type="button">Iniciar missão</button>
+              <h2>Escolha sua nave</h2>
+              <p>Comece com a nave inicial, evolua seu piloto e desbloqueie naves cada vez mais poderosas.</p>
+              <div class="ship-balance">CRÉDITOS <strong id="shipCredits">1.500</strong></div>
+              <div id="shipOptions" class="ship-options"></div>
+              <div class="selected-ship-info" id="selectedShipInfo">Selecione uma nave para continuar.</div>
+              <button id="btnComecarPartida" class="btn-primary full" type="button">Iniciar missão</button>
             </div>
           </div>
 
@@ -277,6 +280,6 @@
 
 <div id="toast" class="toast"></div>
 
-<script src="script.js?v=20260921-2"></script>
+<script src="script.js?v=20260921-3"></script>
 </body>
 </html>
