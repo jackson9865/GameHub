@@ -195,6 +195,12 @@ const bossImages=Array.from({length:5},(_,idx)=>{
   img.src="assets/game/bosses/boss-"+(idx+1)+".svg";
   return img;
 });
+const shipImages={};
+["recruta","falcon","phantom","titan","nova","viper","guardian","eclipse"].forEach(style=>{
+  const img=new Image();
+  img.src="assets/game/ships/"+style+".svg";
+  shipImages[style]=img;
+});
 function currentGalaxyIndex(phase){
   return Math.max(0,(phase-1)%galaxyBackgrounds.length);
 }
