@@ -27,3 +27,23 @@
 .touch-controls{position:relative;z-index:6}.dpad button,.fire-button,.bomb-button{touch-action:none;user-select:none}.bomb-button{width:82px;height:68px;border:1px solid #ff5c69;background:#25101a;color:#fff;border-radius:50%;font-weight:900;display:flex;flex-direction:column;align-items:center;justify-content:center}.bomb-button span{font-size:8px}
 @media(max-width:900px){.warzone-panel{width:135px;padding:10px}.warzone-panel.right{display:none}.warzone-brand{left:10px}.boss-head{width:45%;}.warzone-footer-message{display:none}.warzone-stage #gameCanvas{min-height:0}}
 @media(max-width:700px){.warzone-panel.left{top:70px;left:8px;width:128px}.warzone-brand strong{font-size:17px}.warzone-brand small{font-size:7px}.boss-head{top:12px;left:54%;width:40%}.boss-head strong{font-size:10px}.warzone-actions{right:8px;top:64px}.warzone-stage{margin-top:40px}.touch-controls{display:flex!important}.game-screen{padding-top:0}.warzone-shell{min-height:auto}}
+
+.ship-selection-panel{width:min(850px,94%);max-height:min(680px,92vh);overflow:auto}
+.ship-balance{display:inline-flex;gap:8px;align-items:center;margin:4px auto 14px;padding:7px 12px;border:1px solid rgba(58,170,255,.3);border-radius:999px;background:#06182d;color:#68caff;font-size:11px;letter-spacing:1px}
+.ship-balance strong{color:#fff;font-size:14px}
+.ship-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:left}
+.ship-card{position:relative;padding:13px;border:1px solid rgba(70,145,225,.24);border-radius:12px;background:linear-gradient(160deg,#09233f,#061426);color:#fff;cursor:pointer;transition:.18s;min-height:190px}
+.ship-card:hover{transform:translateY(-3px);border-color:#1da5ff;box-shadow:0 10px 30px rgba(0,130,255,.16)}
+.ship-card.selected{border-color:#27b5ff;box-shadow:0 0 0 1px #27b5ff,0 12px 30px rgba(0,130,255,.18)}
+.ship-card.locked{opacity:.78}
+.ship-visual{height:70px;display:grid;place-items:center;font-size:48px;text-shadow:0 0 18px #24b7ff}
+.ship-card h3{font-size:15px;margin-bottom:4px}
+.ship-card p{font-size:11px;color:#9db5cc;line-height:1.35;min-height:31px}
+.ship-stats{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.ship-stats span{font-size:9px;color:#ccecff;background:#0b2845;border-radius:5px;padding:4px 5px}
+.ship-price{display:block;margin-top:9px;color:#55c6ff;font-weight:900;font-size:12px}
+.ship-card button{margin-top:8px;width:100%;min-height:32px;border:1px solid #176da8;border-radius:7px;background:#071b31;color:#e8f6ff;font-size:11px;font-weight:800}
+.ship-card.owned button{border-color:#1b9a66;color:#7ff0bd}
+.selected-ship-info{min-height:20px;margin:10px 0;color:#9fc2df;font-size:12px}
+@media(max-width:850px){.ship-options{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.ship-options{grid-template-columns:1fr}.ship-selection-panel{padding:18px}.ship-card{min-height:150px}.ship-visual{height:52px}}
