@@ -104,3 +104,6 @@
 @media(max-width:1100px){.ship-options{grid-template-columns:repeat(3,minmax(150px,1fr))}.upgrade-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:760px){.ship-options{grid-template-columns:repeat(2,minmax(130px,1fr))}.upgrade-grid{grid-template-columns:repeat(2,1fr)}.ship-selection-panel{padding:18px}}
 @media(max-width:520px){.ship-options{grid-template-columns:1fr}}
+
+#gameCanvas{background:#020713 url("assets/game/backgrounds/galaxy-1.svg") center/cover no-repeat}
+#gameStartOverlay{background:rgba(1,7,18,.55)}
