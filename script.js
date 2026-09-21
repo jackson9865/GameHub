@@ -520,7 +520,7 @@ function spawnFormation(){
     gameState.enemies.push({
       x:startX+col*gapX,y:startY-row*gapY,targetY:85+row*58,w:42,h:34,
       speed:1.05+Math.random()*.55+level*.01,life:hp,maxLife:hp,type,
-      shoot:80+Math.random()*120,phase:Math.random()*6.28,formation:true,formationX:startX+col*gapX
+      shoot:80+Math.random()*120,phase:Math.random()*6.28,formation:true,formationX:startX+col*gapX,imageIndex:(level+gameState.waveNumber+n)%enemyImages.length
     });
   }
 }
@@ -592,7 +592,7 @@ function drawBackground(ctx,now){
 }
 function drawPlayer(ctx,p,ship){
   if(p.inv>0&&Math.floor(p.inv/4)%2===0)return;
-  const img=new Image();img.src="assets/game/ships/"+ship.style+".svg";
+  const img=shipImages[ship.style];
   ctx.save();ctx.translate(p.x,p.y);
   if(img.complete&&img.naturalWidth){ctx.shadowBlur=24;ctx.shadowColor="#16baff";ctx.drawImage(img,-58,-42,116,84)}
   else{ctx.fillStyle="#18baff";ctx.beginPath();ctx.moveTo(0,-34);ctx.lineTo(28,24);ctx.lineTo(0,14);ctx.lineTo(-28,24);ctx.closePath();ctx.fill()}
