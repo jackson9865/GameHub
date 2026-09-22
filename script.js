@@ -195,6 +195,19 @@ const realShipSources={
   guardian:"assets/game/ships/guardian.png",
   eclipse:"assets/game/ships/eclipse.png"
 };
+const realEnemySources=[
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack1.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack2.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack3.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyRed1.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyRed3.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlue2.png"
+];
+const realBossSources=[
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoRed.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoGreen.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoBlue.png"
+];
 const enemyImages=realEnemySources.map(src=>{const img=new Image();img.src=src;return img;});
 const bossImages=realBossSources.map(src=>{const img=new Image();img.src=src;return img;});
 const missileImage=new Image();
