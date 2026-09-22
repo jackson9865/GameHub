@@ -193,7 +193,7 @@ const realShipSources={
   nova:"https://opengameart.org/sites/default/files/shiper_mix_02_0.png",
   viper:"https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
   guardian:"https://opengameart.org/sites/default/files/SpaceShipLarge.png",
-  eclipse:"https://opengameart.org/sites/default/files/LargeBlueShip.png"
+  eclipse:"https://opengameart.org/sites/default/files/SpaceShipNormal.png"
 };
 const realEnemySources=[
   "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack1.png",
