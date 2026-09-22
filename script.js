@@ -186,28 +186,15 @@ const galaxyBackgrounds=Array.from({length:5},(_,idx)=>{
   return img;
 });
 const realShipSources={
-  recruta:"https://opengameart.org/sites/default/files/shiper_remix_h_hover_0.png",
-  falcon:"https://opengameart.org/sites/default/files/og_003_0.png",
-  phantom:"https://opengameart.org/sites/default/files/og_001_0.png",
-  titan:"https://opengameart.org/sites/default/files/og_002_1.png",
-  nova:"https://opengameart.org/sites/default/files/shiper_mix_02_0.png",
-  viper:"https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
-  guardian:"https://opengameart.org/sites/default/files/SpaceShipLarge.png",
-  eclipse:"https://opengameart.org/sites/default/files/SpaceShipNormal.png"
+  recruta:"assets/game/ships/recruta.png",
+  falcon:"assets/game/ships/falcon.png",
+  phantom:"assets/game/ships/phantom.png",
+  titan:"assets/game/ships/titan.png",
+  nova:"assets/game/ships/nova.png",
+  viper:"assets/game/ships/viper.png",
+  guardian:"assets/game/ships/guardian.png",
+  eclipse:"assets/game/ships/eclipse.png"
 };
-const realEnemySources=[
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack1.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack2.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack3.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyRed1.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyRed3.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlue2.png"
-];
-const realBossSources=[
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoRed.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoGreen.png",
-  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoBlue.png"
-];
 const enemyImages=realEnemySources.map(src=>{const img=new Image();img.src=src;return img;});
 const bossImages=realBossSources.map(src=>{const img=new Image();img.src=src;return img;});
 const missileImage=new Image();
