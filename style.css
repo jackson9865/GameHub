@@ -144,3 +144,726 @@
 .ship-card:hover .ship-visual img,.ship-card.selected .ship-visual img{transform:scale(1.08);filter:drop-shadow(0 0 22px rgba(49,213,255,.65))}
 
 .missile-control{display:block!important;color:#58cfff!important;font-size:8px!important;letter-spacing:.7px;margin-top:4px}
+
+
+/* =========================================================
+   GAMEHUB — RESPONSIVIDADE UNIVERSAL
+   Smartphone · Tablet · Notebook · PC · TV/HDMI
+   Mantém o desenho original e adapta somente dimensões/layout.
+   ========================================================= */
+
+html,body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+img,canvas,video{
+  max-width:100%;
+}
+
+.content{
+  width:100%;
+  padding-left:clamp(16px,2.4vw,42px);
+  padding-right:clamp(16px,2.4vw,42px);
+}
+
+.hero,
+.stats,
+.block,
+.extra-section{
+  width:100%;
+}
+
+/* Monitores grandes / TV */
+@media (min-width:1600px){
+  .sidebar{
+    width:270px;
+    min-width:270px;
+    padding-left:18px;
+    padding-right:18px;
+  }
+
+  .content{
+    padding-left:clamp(28px,2.5vw,60px);
+    padding-right:clamp(28px,2.5vw,60px);
+  }
+
+  .hero{
+    min-height:470px;
+    grid-template-columns:minmax(420px,1fr) minmax(560px,1.18fr);
+  }
+
+  .hero-art{
+    min-height:470px;
+  }
+
+  .hero-text{
+    padding:54px 24px 40px 28px;
+  }
+
+  .hero-text h1{
+    font-size:clamp(58px,4.2vw,82px);
+  }
+
+  .hero-text p{
+    font-size:19px;
+  }
+
+  .categories{
+    gap:18px;
+  }
+
+  .games{
+    gap:18px;
+  }
+
+  .game-stage{
+    max-width:1500px;
+  }
+
+  .warzone-stage{
+    width:min(1500px,96vw);
+  }
+
+  .warzone-stage #gameCanvas{
+    width:100%;
+    height:auto;
+  }
+}
+
+/* Tablets e notebooks menores */
+@media (max-width:1100px){
+  .content{
+    padding-left:20px;
+    padding-right:20px;
+  }
+
+  .hero{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+
+  .featured{
+    right:12px;
+    width:min(300px,calc(100% - 24px));
+  }
+
+  .categories{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+
+  .games{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+/* Tablet / smartphone em paisagem */
+@media (max-width:850px){
+  .sidebar{
+    width:72px;
+    min-width:72px;
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .brand-name,
+  .brand-subtitle,
+  .nav-item span,
+  .side-card p,
+  .side-card .btn-primary{
+    display:none;
+  }
+
+  .nav-item{
+    justify-content:center;
+    padding:0;
+  }
+
+  .nav-item.active{
+    padding-left:0;
+    border-left:0;
+    border-bottom:3px solid #078cff;
+  }
+
+  .side-card{
+    padding:10px 5px;
+  }
+
+  .content{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .topbar{
+    gap:10px;
+  }
+
+  .search{
+    min-width:0;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+  }
+
+  .hero-art{
+    min-height:380px;
+  }
+
+  .warzone-stage,
+  .game-stage{
+    width:100%;
+  }
+
+  .ship-selection-panel{
+    width:96vw;
+  }
+}
+
+/* Smartphone */
+@media (max-width:700px){
+  body{
+    padding-bottom:68px;
+  }
+
+  .app{
+    display:block;
+    min-height:100vh;
+  }
+
+  /*
+    No celular a navegação vira uma barra inferior.
+    Isso evita perder espaço horizontal e deixa o conteúdo ocupar
+    praticamente toda a largura da tela.
+  */
+  .sidebar{
+    position:fixed;
+    z-index:120;
+    left:0;
+    right:0;
+    bottom:0;
+    top:auto;
+    width:100%;
+    min-width:0;
+    height:64px;
+    padding:5px 4px;
+    border-right:0;
+    border-top:1px solid rgba(80,145,210,.25);
+    background:rgba(2,13,28,.97);
+    backdrop-filter:blur(12px);
+  }
+
+  .brand,
+  .side-card{
+    display:none;
+  }
+
+  .sidebar nav{
+    width:100%;
+    height:100%;
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:2px;
+  }
+
+  .nav-item{
+    min-width:0;
+    height:54px;
+    padding:0!important;
+    border:0!important;
+    border-radius:7px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+  }
+
+  .nav-item.active{
+    background:rgba(8,125,237,.16);
+    box-shadow:inset 0 -2px 0 #078cff;
+  }
+
+  .content{
+    width:100%;
+    padding:0 10px 18px;
+  }
+
+  .topbar{
+    height:auto;
+    min-height:0;
+    padding:10px 0;
+    flex-wrap:wrap;
+    border-bottom:1px solid rgba(70,130,195,.12);
+  }
+
+  .search{
+    order:3;
+    flex:0 0 100%;
+    max-width:none;
+    height:42px;
+  }
+
+  .top-actions{
+    margin-left:auto;
+    gap:5px;
+  }
+
+  .btn-login,
+  .icon-btn,
+  .btn-logout{
+    height:38px;
+    padding:0 10px;
+  }
+
+  .user-name{
+    max-width:100px;
+    font-size:12px;
+  }
+
+  .top-create{
+    display:none;
+  }
+
+  .hero{
+    margin-top:10px;
+    min-height:0;
+    grid-template-columns:1fr;
+    border-radius:12px;
+  }
+
+  .hero-text{
+    padding:30px 20px 25px;
+  }
+
+  .hero-text h1{
+    font-size:clamp(38px,12vw,54px);
+    letter-spacing:-1.5px;
+  }
+
+  .hero-text p{
+    font-size:15px;
+  }
+
+  .hero-buttons{
+    flex-wrap:wrap;
+  }
+
+  .hero-buttons button{
+    flex:1 1 150px;
+  }
+
+  .hero-art{
+    min-height:340px;
+  }
+
+  .moon{
+    width:130px;
+    height:130px;
+  }
+
+  .featured{
+    top:18px;
+    left:14px;
+    right:14px;
+    width:auto;
+    min-height:0;
+    padding:18px;
+  }
+
+  .featured h2{
+    font-size:25px;
+  }
+
+  .featured small{
+    font-size:11px;
+  }
+
+  .hero-symbol{
+    display:none;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .stats>div{
+    min-height:74px;
+    padding:11px;
+    grid-template-columns:32px 1fr;
+  }
+
+  .stats b{
+    font-size:22px;
+  }
+
+  .stats strong{
+    font-size:14px;
+  }
+
+  .stats small{
+    font-size:10px;
+  }
+
+  .block{
+    margin-top:18px;
+  }
+
+  .heading h2{
+    font-size:19px;
+  }
+
+  .categories{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .categories button{
+    height:92px;
+    font-size:28px;
+    padding:10px;
+  }
+
+  .categories span{
+    font-size:12px;
+  }
+
+  .games{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+
+  .game-image{
+    height:105px;
+    font-size:43px;
+  }
+
+  .games h3{
+    font-size:13px;
+    margin-left:9px;
+    margin-right:9px;
+  }
+
+  .games p{
+    margin-left:9px;
+    margin-right:9px;
+  }
+
+  .games article>button{
+    width:calc(100% - 18px);
+    margin-left:9px;
+    margin-right:9px;
+  }
+
+  .modal{
+    padding:10px;
+    align-items:center;
+  }
+
+  .modal-box{
+    width:100%;
+    max-height:88vh;
+    padding:22px 16px;
+    border-radius:14px;
+  }
+
+  .cadastro-box{
+    width:100%;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .full-col{
+    grid-column:auto;
+  }
+
+  footer{
+    padding-bottom:12px;
+  }
+
+  /* Warzone no celular */
+  .game-screen{
+    padding:0;
+    width:100%;
+  }
+
+  .warzone-shell{
+    width:100%;
+    min-height:calc(100vh - 64px);
+    padding:4px 0 12px;
+  }
+
+  .warzone-brand{
+    top:9px;
+    left:8px;
+  }
+
+  .warzone-brand strong{
+    font-size:15px;
+  }
+
+  .warzone-brand small{
+    font-size:6px;
+    letter-spacing:2px;
+  }
+
+  .boss-head{
+    top:7px;
+    left:50%;
+    width:42%;
+  }
+
+  .boss-head strong{
+    font-size:8px;
+    margin-bottom:4px;
+    white-space:nowrap;
+  }
+
+  .boss-bar{
+    height:7px;
+  }
+
+  .boss-shield-bar{
+    height:4px;
+  }
+
+  .warzone-actions{
+    top:7px;
+    right:7px;
+    gap:4px;
+  }
+
+  .hud-button{
+    min-width:38px;
+    height:32px;
+    padding:0 7px;
+    font-size:11px;
+  }
+
+  .warzone-panel.left{
+    top:48px;
+    left:7px;
+    width:112px;
+    padding:8px 7px;
+    border-radius:7px;
+  }
+
+  .warzone-panel.left .hud-label{
+    font-size:9px;
+    margin-bottom:4px;
+  }
+
+  .warzone-panel.left .shield-label{
+    margin-top:7px;
+  }
+
+  .warzone-panel.left .bars{
+    gap:2px;
+    margin-bottom:4px;
+  }
+
+  .warzone-panel.left .bars i{
+    height:7px;
+  }
+
+  .warzone-panel.left .hud-value{
+    margin-top:7px;
+  }
+
+  .warzone-panel.left .hud-value small{
+    font-size:7px;
+  }
+
+  .warzone-panel.left .hud-value b,
+  .warzone-panel.left .hud-value.compact b{
+    font-size:10px;
+    margin-top:1px;
+  }
+
+  .warzone-panel.right{
+    display:none;
+  }
+
+  .warzone-stage{
+    width:100%;
+    margin-top:36px;
+    min-height:0;
+  }
+
+  .warzone-stage #gameCanvas{
+    display:block;
+    width:100%;
+    height:auto;
+    min-height:0;
+    aspect-ratio:16/9;
+  }
+
+  .warzone-footer-message{
+    display:none;
+  }
+
+  .touch-controls{
+    display:flex!important;
+    width:100%;
+    padding:0 8px;
+    margin-top:7px;
+  }
+
+  .dpad button,
+  .fire-button{
+    min-width:45px;
+    min-height:45px;
+  }
+
+  .bomb-button{
+    width:68px;
+    height:58px;
+  }
+
+  .missile-hint{
+    display:none;
+  }
+
+  .game-panel{
+    width:min(94vw,430px);
+    padding:18px 14px;
+  }
+
+  .ship-selection-panel{
+    width:96vw;
+    max-height:86vh;
+    padding:15px;
+  }
+
+  .ship-options{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .ship-card{
+    min-height:0;
+    padding:10px;
+  }
+
+  .ship-visual{
+    height:95px!important;
+  }
+
+  .ship-visual img{
+    height:90px;
+  }
+
+  .upgrade-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .ship-workshop{
+    width:96vw;
+    max-height:88vh;
+    padding:16px;
+  }
+
+  .workshop-body{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .workshop-ship-preview{
+    min-height:210px;
+  }
+
+  #workshopShipImage{
+    height:150px;
+  }
+
+  .workshop-upgrades{
+    grid-template-columns:1fr;
+  }
+
+  .workshop-footer{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .unlock-ship-image{
+    width:180px;
+    height:115px;
+  }
+}
+
+/* Smartphones muito estreitos */
+@media (max-width:380px){
+  .content{
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .top-actions .btn-login{
+    font-size:11px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .games{
+    grid-template-columns:1fr;
+  }
+
+  .categories button{
+    height:84px;
+  }
+
+  .hero-text{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .hero-buttons{
+    flex-direction:column;
+  }
+
+  .hero-buttons button{
+    width:100%;
+  }
+
+  .warzone-panel.left{
+    width:96px;
+  }
+
+  .warzone-panel.left .bars i{
+    height:6px;
+  }
+
+  .touch-controls{
+    padding-left:4px;
+    padding-right:4px;
+  }
+}
+
+/* TVs / HDMI em modo paisagem: aproveita a área sem esticar conteúdo */
+@media (min-width:1101px) and (min-height:700px){
+  .content{
+    padding-bottom:40px;
+  }
+
+  .hero{
+    max-width:1900px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .stats,
+  .block{
+    max-width:1900px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
