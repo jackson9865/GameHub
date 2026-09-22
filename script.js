@@ -186,29 +186,27 @@ const galaxyBackgrounds=Array.from({length:5},(_,idx)=>{
   return img;
 });
 const realShipSources={
-  recruta:"https://opengameart.org/sites/default/files/fighter_0.png",
-  falcon:"https://opengameart.org/sites/default/files/SpaceShipSmall.png",
-  phantom:"https://opengameart.org/sites/default/files/SpaceShipNormal.png",
-  titan:"https://opengameart.org/sites/default/files/SpaceShipLarge.png",
-  nova:"https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
-  viper:"https://opengameart.org/sites/default/files/spaceship_16.png",
-  guardian:"https://opengameart.org/sites/default/files/V120_0.png",
-  eclipse:"https://opengameart.org/sites/default/files/V1202_0.png"
+  recruta:"https://opengameart.org/sites/default/files/shiper_remix_h_hover_0.png",
+  falcon:"https://opengameart.org/sites/default/files/og_003_0.png",
+  phantom:"https://opengameart.org/sites/default/files/og_001_0.png",
+  titan:"https://opengameart.org/sites/default/files/og_002_1.png",
+  nova:"https://opengameart.org/sites/default/files/shiper_mix_02_0.png",
+  viper:"https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
+  guardian:"https://opengameart.org/sites/default/files/SpaceShipLarge.png",
+  eclipse:"https://opengameart.org/sites/default/files/LargeBlueShip.png"
 };
 const realEnemySources=[
-  "https://opengameart.org/sites/default/files/SpaceShipSmall.png",
-  "https://opengameart.org/sites/default/files/fighter_0.png",
-  "https://opengameart.org/sites/default/files/SpaceShipNormal.png",
-  "https://opengameart.org/sites/default/files/spaceship_16.png",
-  "https://opengameart.org/sites/default/files/V120_0.png",
-  "https://opengameart.org/sites/default/files/V1202_0.png"
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack1.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack2.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlack3.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyRed1.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyRed3.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/enemyBlue2.png"
 ];
 const realBossSources=[
-  "https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
-  "https://opengameart.org/sites/default/files/V1202_0.png",
-  "https://opengameart.org/sites/default/files/V120_0.png",
-  "https://opengameart.org/sites/default/files/spaceship_16.png",
-  "https://opengameart.org/sites/default/files/SpaceShipLarge.png"
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoRed.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoGreen.png",
+  "https://cdn.jsdelivr.net/gh/kefik/kenney/Shooter/ufoBlue.png"
 ];
 const enemyImages=realEnemySources.map(src=>{const img=new Image();img.src=src;return img;});
 const bossImages=realBossSources.map(src=>{const img=new Image();img.src=src;return img;});
@@ -363,7 +361,7 @@ function abrirOficinaNave(id){
   $("#shipWorkshopOverlay").classList.remove("hidden");
   $("#workshopShipName").textContent=ship.name;
   $("#workshopShipDesc").textContent=ship.desc;
-  $("#workshopShipImage").src="assets/game/ships/"+ship.style+".svg";
+  $("#workshopShipImage").src=realShipSources[ship.style]||"assets/game/ships/"+ship.style+".svg";
   $("#workshopCredits").textContent=formatCredits(data.credits);
   const values=[
     ["LASER",ship.damage+(p.level-1)*.09+(p.modules.weapon||0)*.12,Math.min(100,(ship.damage/3+(p.modules.weapon||0)*.12)*100)],
@@ -793,7 +791,7 @@ function gameLoop(now){
 function mostrarDesbloqueioNave(ship,reward){
   const overlay=$("#gameUnlockOverlay");if(!overlay)return;
   $("#unlockShipName").textContent=ship.name;
-  $("#unlockShipImage").src="assets/game/ships/"+ship.style+".svg";
+  $("#unlockShipImage").src=realShipSources[ship.style]||"assets/game/ships/"+ship.style+".svg";
   $("#unlockShipText").textContent="Parabéns pela conquista! Você derrotou o chefão e acabou de desbloquear a "+ship.name+".";
   $("#unlockShipStats").textContent="LASER "+ship.damage.toFixed(2)+" · ESCUDO "+ship.shield+" · MÍSSEIS "+Math.round(450+ship.damage*100)+" · RECOMPENSA +"+formatCredits(reward)+" CRÉDITOS";
   overlay.classList.remove("hidden");
