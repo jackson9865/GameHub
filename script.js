@@ -213,8 +213,55 @@ const bossImages=realBossSources.map(src=>{const img=new Image();img.src=src;ret
 const missileImage=new Image();
 missileImage.src="assets/game/weapons/missile.svg";
 const shipImages={};
+const cleanShipImages={};
+
+function limparImagemNave(img){
+  try{
+    const w=img.naturalWidth,h=img.naturalHeight;
+    if(!w||!h)return null;
+    const c=document.createElement("canvas");
+    c.width=w;c.height=h;
+    const cctx=c.getContext("2d",{willReadFrequently:true});
+    cctx.drawImage(img,0,0);
+    const image=cctx.getImageData(0,0,w,h);
+    const px=image.data;
+    const mask=new Uint8Array(w*h);
+    for(let i=0,p=0;i<px.length;i+=4,p++)mask[p]=px[i+3]>100?1:0;
+
+    const seen=new Uint8Array(w*h);
+    let best=[];
+    const stack=[];
+    for(let start=0;start<mask.length;start++){
+      if(!mask[start]||seen[start])continue;
+      const component=[];
+      stack.length=0;stack.push(start);seen[start]=1;
+      while(stack.length){
+        const p=stack.pop();
+        component.push(p);
+        const x=p%w,y=(p/w)|0;
+        if(x>0){const q=p-1;if(mask[q]&&!seen[q]){seen[q]=1;stack.push(q)}}
+        if(x<w-1){const q=p+1;if(mask[q]&&!seen[q]){seen[q]=1;stack.push(q)}}
+        if(y>0){const q=p-w;if(mask[q]&&!seen[q]){seen[q]=1;stack.push(q)}}
+        if(y<h-1){const q=p+w;if(mask[q]&&!seen[q]){seen[q]=1;stack.push(q)}}
+      }
+      if(component.length>best.length)best=component;
+    }
+
+    const keep=new Uint8Array(w*h);
+    for(const p of best)keep[p]=1;
+    for(let p=0;p<keep.length;p++){
+      if(!keep[p])px[p*4+3]=0;
+    }
+    cctx.putImageData(image,0,0);
+    return c;
+  }catch(e){
+    return img;
+  }
+}
+
 Object.entries(realShipSources).forEach(([style,src])=>{
   const img=new Image();
+  img.onload=()=>{cleanShipImages[style]=limparImagemNave(img)||img;};
   img.src=src;
   shipImages[style]=img;
 });
@@ -486,7 +533,7 @@ function renderGame(now){
   for(const b of gameState.enemyBullets)drawEnemyShot(ctx,b);
   for(const e of gameState.enemies)drawEnemy(ctx,e);
   if(gameState.boss)drawBoss(ctx,gameState.boss);
-  drawPlayer(ctx,gameState.player,shipById(gameState.shipId));
+  drawPlayer(ctx,gameState.player,shipById(gameState.shipId),now);
 }
 function prepararEtapa(){
   gameState.stageKills=0;
@@ -668,12 +715,51 @@ function drawBackground(ctx,now){
   ctx.globalAlpha=1;
   ctx.fillStyle="rgba(0,4,15,.12)";ctx.fillRect(0,0,w,h);
 }
-function drawPlayer(ctx,p,ship){
+function drawThruster(ctx,p,now){
+  const pulse=.82+Math.sin(now*.028)*.16+Math.sin(now*.071)*.07;
+  const flame=34*pulse;
+  ctx.save();
+  ctx.translate(p.x,p.y+27);
+  ctx.globalAlpha=.9;
+  const g=ctx.createLinearGradient(0,0,0,flame);
+  g.addColorStop(0,"rgba(220,250,255,.98)");
+  g.addColorStop(.22,"rgba(70,210,255,.95)");
+  g.addColorStop(.62,"rgba(24,140,255,.62)");
+  g.addColorStop(1,"rgba(24,100,255,0)");
+  ctx.fillStyle=g;
+  ctx.beginPath();
+  ctx.moveTo(-7,0);
+  ctx.quadraticCurveTo(-4,flame*.42,-2,flame);
+  ctx.lineTo(0,flame+4);
+  ctx.lineTo(2,flame);
+  ctx.quadraticCurveTo(4,flame*.42,7,0);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.globalAlpha=.72;
+  ctx.fillStyle="#8feaff";
+  ctx.beginPath();
+  ctx.moveTo(-2.5,1);
+  ctx.lineTo(0,flame*.72);
+  ctx.lineTo(2.5,1);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawPlayer(ctx,p,ship,now){
   if(p.inv>0&&Math.floor(p.inv/4)%2===0)return;
-  const img=shipImages[ship.style];
+  ctx.save();
+  drawThruster(ctx,p,now);
+  ctx.restore();
+
+  const img=cleanShipImages[ship.style]||shipImages[ship.style];
   ctx.save();ctx.translate(p.x,p.y);
-  if(img&&img.complete&&img.naturalWidth){ctx.drawImage(img,-58,-42,116,84)}
-  else{ctx.fillStyle="#18baff";ctx.beginPath();ctx.moveTo(0,-34);ctx.lineTo(28,24);ctx.lineTo(0,14);ctx.lineTo(-28,24);ctx.closePath();ctx.fill()}
+  if(img&&((img instanceof HTMLCanvasElement&&img.width)||img.complete&&img.naturalWidth)){
+    ctx.drawImage(img,-58,-42,116,84);
+  }else{
+    ctx.fillStyle="#18baff";ctx.beginPath();ctx.moveTo(0,-34);ctx.lineTo(28,24);ctx.lineTo(0,14);ctx.lineTo(-28,24);ctx.closePath();ctx.fill();
+  }
   ctx.restore();
 }
 function drawEnemy(ctx,e){
