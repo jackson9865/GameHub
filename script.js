@@ -185,22 +185,39 @@ const galaxyBackgrounds=Array.from({length:5},(_,idx)=>{
   img.src="assets/game/backgrounds/galaxy-"+(idx+1)+".svg";
   return img;
 });
-const enemyImages=Array.from({length:6},(_,idx)=>{
-  const img=new Image();
-  img.src="assets/game/enemies/enemy-"+(idx+1)+".svg";
-  return img;
-});
-const bossImages=Array.from({length:5},(_,idx)=>{
-  const img=new Image();
-  img.src="assets/game/bosses/boss-"+(idx+1)+".svg";
-  return img;
-});
+const realShipSources={
+  recruta:"https://opengameart.org/sites/default/files/fighter_0.png",
+  falcon:"https://opengameart.org/sites/default/files/SpaceShipSmall.png",
+  phantom:"https://opengameart.org/sites/default/files/SpaceShipNormal.png",
+  titan:"https://opengameart.org/sites/default/files/SpaceShipLarge.png",
+  nova:"https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
+  viper:"https://opengameart.org/sites/default/files/spaceship_16.png",
+  guardian:"https://opengameart.org/sites/default/files/V120_0.png",
+  eclipse:"https://opengameart.org/sites/default/files/V1202_0.png"
+};
+const realEnemySources=[
+  "https://opengameart.org/sites/default/files/SpaceShipSmall.png",
+  "https://opengameart.org/sites/default/files/fighter_0.png",
+  "https://opengameart.org/sites/default/files/SpaceShipNormal.png",
+  "https://opengameart.org/sites/default/files/spaceship_16.png",
+  "https://opengameart.org/sites/default/files/V120_0.png",
+  "https://opengameart.org/sites/default/files/V1202_0.png"
+];
+const realBossSources=[
+  "https://opengameart.org/sites/default/files/SpaceShipExtraLarge_0.png",
+  "https://opengameart.org/sites/default/files/V1202_0.png",
+  "https://opengameart.org/sites/default/files/V120_0.png",
+  "https://opengameart.org/sites/default/files/spaceship_16.png",
+  "https://opengameart.org/sites/default/files/SpaceShipLarge.png"
+];
+const enemyImages=realEnemySources.map(src=>{const img=new Image();img.src=src;return img;});
+const bossImages=realBossSources.map(src=>{const img=new Image();img.src=src;return img;});
 const missileImage=new Image();
 missileImage.src="assets/game/weapons/missile.svg";
 const shipImages={};
-["recruta","falcon","phantom","titan","nova","viper","guardian","eclipse"].forEach(style=>{
+Object.entries(realShipSources).forEach(([style,src])=>{
   const img=new Image();
-  img.src="assets/game/ships/"+style+".svg";
+  img.src=src;
   shipImages[style]=img;
 });
 function currentGalaxyIndex(phase){
@@ -301,7 +318,7 @@ function renderShipOptions(){
     const p=shipProgress(ship.id),selected=ship.id===selectedShipId;
     const action=owned?"ABRIR OFICINA":available?"COMPRAR":"BLOQUEADA";
     const price=owned?"NAVE DESBLOQUEADA":available?formatCredits(ship.price)+" CRÉDITOS":"LIBERA NA FASE "+ship.unlockPhase;
-    const image="assets/game/ships/"+ship.style+".svg";
+    const image=realShipSources[ship.style]||"assets/game/ships/"+ship.style+".svg";
     return '<article class="ship-card '+(selected?"selected ":"")+(owned?"owned ":"")+(available?"":"phase-locked")+'" data-ship-card="'+ship.id+'">'+
       '<div class="ship-visual"><img src="'+image+'" alt="'+ship.name+'"></div><h3>'+ship.name+'</h3><p>'+ship.desc+'</p>'+
       '<div class="ship-stats"><span>NV. '+p.level+'/'+ship.maxLevel+'</span><span>⚡ '+ship.speed.toFixed(1)+'</span><span>☄ DANO '+ship.damage.toFixed(2)+'</span><span>🛡 '+ship.shield+'</span></div>'+
